@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memeboxer - Voting Arena</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background:
+                radial-gradient(circle at 50% 10%, rgba(232,0,26,0.22), transparent 35%),
+                radial-gradient(circle at 50% 70%, rgba(232,0,26,0.10), transparent 45%),
+                #000;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(232,0,26,0.5);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f2f2f2;
+            font-family: 'Arial Black', Impact, sans-serif;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.4rem 0.7rem;
+            border-radius: 5px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.11em;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            background: rgba(232,0,26,0.1);
+        }
+
+        .nav-links a.active {
+            color: #ffd700;
+            background: rgba(232,0,26,0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 2rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #f2f2f2;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+            color: #aaa;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Live Battle Arena */
+        .battle-arena {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        .battle-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .battle-status {
+            font-size: 1rem;
+            color: #39ff14;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .battle-timer {
+            font-size: 2rem;
+            color: #ffd700;
+            font-weight: bold;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-shadow: 0 0 10px rgba(255,215,0,0.4);
+        }
+
+        /* Top 6 */
+        .top-five {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .top-coin {
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-coin:hover {
+            border-color: rgba(232,0,26,0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(232,0,26,0.25);
+            background: rgba(232,0,26,0.06);
+        }
+
+        .top-coin.voted {
+            border-color: #39ff14;
+            background: rgba(57,255,20,0.05);
+            box-shadow: 0 0 16px rgba(57,255,20,0.2);
+        }
+
+        .coin-rank {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #e8001a;
+            color: white;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+
+        .coin-symbol {
+            font-size: 2.5rem;
+            margin: 0.8rem 0 0.4rem;
+            font-weight: bold;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin-symbol img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .coin-name {
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        .vote-count {
+            font-size: 1rem;
+            color: #39ff14;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .vote-percentage {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e8001a, rgba(232,0,26,0.5));
+            border-radius: 2px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* Remaining Coins */
+        .remaining-coins {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+
+        .remaining-title {
+            text-align: center;
+            font-size: 1rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-family: 'Arial Black', Impact, sans-serif;
+        }
+
+        .coin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .coin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.04);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .coin-item:hover {
+            background: rgba(232,0,26,0.06);
+            border-color: rgba(232,0,26,0.4);
+            transform: translateX(4px);
+        }
+
+        .coin-item.voted {
+            background: rgba(57,255,20,0.05);
+            border-color: #39ff14;
+        }
+
+        .coin-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .coin-rank-small {
+            background: rgba(255,255,255,0.08);
+            color: #aaa;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            margin-right: 0.75rem;
+            min-width: 24px;
+        }
+
+        .coin-details {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .coin-emoji {
+            width: 28px;
+            height: 28px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coin-emoji img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .coin-text { flex: 1; }
+
+        .coin-name-small {
+            font-weight: bold;
+            margin-bottom: 0.1rem;
+            font-size: 0.85rem;
+        }
+
+        .coin-symbol-small {
+            opacity: 0.6;
+            font-size: 0.75rem;
+        }
+
+        .coin-votes {
+            text-align: right;
+            color: #39ff14;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            max-width: 1000px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(255,215,0,0.3);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            font-family: 'Arial Black', Impact, sans-serif;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 0 12px rgba(255,215,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2.5rem 2rem;
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            color: #f2f2f2;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .cta-subtitle {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.7;
+            color: #aaa;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #e8001a, #9b0012);
+            color: white;
+            text-decoration: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Arial Black', Impact, sans-serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: all 0.2s ease;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(232,0,26,0.4);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(232,0,26,0.6);
+        }
+
+        .secondary-btn {
+            background: rgba(255,255,255,0.06);
+            color: #f2f2f2;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: none;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.35);
+            box-shadow: none;
+        }
+
+        /* Toast */
+        .toast-popup {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #1a0a00, #0d0d0d);
+            border: 1px solid #ffd700;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 10000;
+            font-weight: bold;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(255,215,0,0.2);
+            white-space: nowrap;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-links {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem 1rem;
+        }
+
+        .footer-links a {
+            color: #777;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: #ffd700; }
+
+        .disclaimer {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            max-width: 600px;
+            margin: 0 auto 1rem;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+
+        .community-message {
+            font-size: 0.75rem;
+            color: #e8001a;
+            margin-top: 0.4rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .nav { flex-direction: column; gap: 1rem; text-align: center; }
+            .nav-links { gap: 0.4rem; justify-content: center; }
+            .header { padding: 0.8rem 1rem; }
+            .hero { padding-top: 160px; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 1.8rem; }
+            .coin-grid { grid-template-columns: 1fr; }
+            .top-five { grid-template-columns: repeat(2, 1fr); }
+            .cta-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="logo">
+                <div style="width:34px;height:34px;background:linear-gradient(135deg,#e8001a,#520008);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-right:10px;font-size:18px;box-shadow:0 0 16px rgba(232,0,26,0.5);">🥊</div>
+                MEMEBOXER
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="fighters-gallery.html">Fighters Gallery</a>
+                <a href="arena.html" class="active">Voting Arena</a>
+                <a href="community.html">Community</a>
+                <a href="#token">MBXR Token</a>
+                <a href="disclaimer.html">Disclaimer</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">🥊 Voting Arena</h1>
+        <p class="hero-subtitle">Vote for Your Favorite Meme Coin Champion</p>
+        <div style="text-align:center;margin-bottom:1.5rem;opacity:0.8;">
+            <span style="color:#39ff14;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:0.15em;">⚡ Powered by Polygon Blockchain</span>
+        </div>
+
+        <!-- Live Battle Arena -->
+        <div class="battle-arena">
+            <div class="battle-header">
+                <div class="battle-status">🔴 Live Meme Coin Voting</div>
+                <div class="battle-timer" id="battleTimer">0:29:45</div>
+                <div style="font-size:0.85rem;opacity:0.7;margin-top:0.5rem;text-transform:uppercase;letter-spacing:0.1em;">
+                    👥 <span id="totalVotes">0</span> total votes
+                </div>
+            </div>
+
+            <h3 style="text-align:center;color:#ffd700;margin-bottom:1rem;font-family:'Arial Black',Impact,sans-serif;font-size:0.85rem;letter-spacing:0.2em;text-transform:uppercase;">🏆 Top 6 Fighters</h3>
+            <div class="top-five" id="topSix"></div>
+
+            <div class="remaining-coins">
+                <div class="remaining-title">⚔️ The Contenders</div>
+                <div class="coin-grid" id="remainingCoins"></div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-dashboard">
+            <div class="stat-card">
+                <div class="stat-number" id="memeCoins">30</div>
+                <div class="stat-label">Fighters Listed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="onlineNow">423</div>
+                <div class="stat-label">In the Arena</div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <div class="cta-title">Ready to Fight?</div>
+            <div class="cta-subtitle">Join thousands of Memeboxers in the ultimate crypto voting arena</div>
+            <div style="color:#39ff14;font-size:13px;margin-bottom:1.2rem;font-weight:bold;text-transform:uppercase;letter-spacing:0.1em;">
+                ⚡ Fast voting on Polygon Blockchain
+            </div>
+            <div class="cta-buttons">
+                <a href="#" class="cta-btn">💰 Get MBXR Token</a>
+                <a href="https://x.com/Memeboxers" target="_blank" class="cta-btn secondary-btn">🐦 Follow On X</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="fighters-gallery.html">Fighters Gallery</a>
+            <a href="arena.html">Voting Arena</a>
+            <a href="community.html">Community</a>
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+        </div>
+        <div class="disclaimer">
+            ⚠️ MBXR is a Polygon blockchain token for entertainment only. High risk of total loss. Not financial advice. 18+ only.
+        </div>
+        <div class="copyright">© 2026 Memeboxer (MBXR). All rights reserved.</div>
+        <div class="community-message">Built with ❤️ for the meme community</div>
+    </footer>
+
+    <script>
+        const STORAGE_KEYS = {
+            votes: 'mmbx_voting_data',
+            history: 'mmbx_battle_history',
+            lastUpdate: 'mmbx_last_update',
+            battleTimer: 'mmbx_battle_timer'
+        };
+
+        const fighterImages = {
+            'DOGE':'images/fighters/dogecoin.png',
+            'SHIB':'images/fighters/shiba-inu.png',
+            'PEPE':'images/fighters/pepe.png',
+            'WIF':'images/fighters/dog-wif-hat.png',
+            'BONK':'images/fighters/bonk.png',
+            'FLOKI':'images/fighters/floki-inu.png',
+            'TRUMP':'images/fighters/maga-coin.png',
+            'BRETT':'images/fighters/brett.png',
+            'POPCAT':'images/fighters/popcat.png',
+            'MOG':'images/fighters/mog-coin.png',
+            'NEIRO':'images/fighters/neiro.png',
+            'TURBO':'images/fighters/turbo.png',
+            'MEME':'images/fighters/meme.png',
+            'CAT':'images/fighters/simons-cat.png',
+            'GOAT':'images/fighters/goatseus-maximus.png',
+            'PNUT':'images/fighters/peanut-squirrel.png',
+            'ACT':'images/fighters/act-ai-prophecy.png',
+            'PONKE':'images/fighters/ponke.png',
+            'MOODENG':'images/fighters/moo-deng.png',
+            'CHILLGUY':'images/fighters/chill-guy.png',
+            'BOME':'images/fighters/book-of-meme.png',
+            'MYRO':'images/fighters/myro.png',
+            'DOGS':'images/fighters/dogs.png',
+            'WEN':'images/fighters/wen.png',
+            'DEGEN':'images/fighters/degen.png',
+            'PEPU':'images/fighters/pepe-unchained.png',
+            'SLERF':'images/fighters/slerf.png',
+            'MEW':'images/fighters/cat-dogs-world.png',
+            'HONK':'images/fighters/honk.png',
+            'MBXR':'images/fighters/memeboxer.png'
+        };
+
+        const memeCoins = [
+            { rank:1,  symbol:'DOGE',     name:'Dogecoin',           emoji:'🐕',   votes:0 },
+            { rank:2,  symbol:'SHIB',     name:'Shiba Inu',           emoji:'🐶',   votes:0 },
+            { rank:3,  symbol:'PEPE',     name:'Pepe',                emoji:'🐸',   votes:0 },
+            { rank:4,  symbol:'WIF',      name:'Dogwifhat',           emoji:'🎩',   votes:0 },
+            { rank:5,  symbol:'BONK',     name:'Bonk',                emoji:'⚾',   votes:0 },
+            { rank:6,  symbol:'FLOKI',    name:'Floki Inu',           emoji:'🗡️',  votes:0 },
+            { rank:7,  symbol:'TRUMP',    name:'Official Trump',      emoji:'🇺🇸',  votes:0 },
+            { rank:8,  symbol:'BRETT',    name:'Brett',               emoji:'👱',   votes:0 },
+            { rank:9,  symbol:'POPCAT',   name:'Popcat',              emoji:'😺',   votes:0 },
+            { rank:10, symbol:'MOG',      name:'Mog Coin',            emoji:'😼',   votes:0 },
+            { rank:11, symbol:'NEIRO',    name:'Neiro',               emoji:'🐕‍🦺', votes:0 },
+            { rank:12, symbol:'TURBO',    name:'Turbo',               emoji:'🏎️',  votes:0 },
+            { rank:13, symbol:'MEME',     name:'Meme',                emoji:'😂',   votes:0 },
+            { rank:14, symbol:'CAT',      name:"Simon's Cat",         emoji:'🐱',   votes:0 },
+            { rank:15, symbol:'GOAT',     name:'Goatseus Maximus',    emoji:'🐐',   votes:0 },
+            { rank:16, symbol:'PNUT',     name:'Peanut',              emoji:'🥜',   votes:0 },
+            { rank:17, symbol:'ACT',      name:'Act I',               emoji:'🎭',   votes:0 },
+            { rank:18, symbol:'PONKE',    name:'Ponke',               emoji:'🐒',   votes:0 },
+            { rank:19, symbol:'MOODENG',  name:'Moo Deng',            emoji:'🦛',   votes:0 },
+            { rank:20, symbol:'CHILLGUY', name:'Chill Guy',           emoji:'😎',   votes:0 },
+            { rank:21, symbol:'BOME',     name:'Book of Meme',        emoji:'📚',   votes:0 },
+            { rank:22, symbol:'MYRO',     name:'Myro',                emoji:'🐕',   votes:0 },
+            { rank:23, symbol:'DOGS',     name:'Dogs',                emoji:'🐕‍🦺', votes:0 },
+            { rank:24, symbol:'WEN',      name:'Wen',                 emoji:'⏰',   votes:0 },
+            { rank:25, symbol:'DEGEN',    name:'Degen',               emoji:'🎰',   votes:0 },
+            { rank:26, symbol:'PEPU',     name:'Pepe Unchained',      emoji:'🐸',   votes:0 },
+            { rank:27, symbol:'SLERF',    name:'Slerf',               emoji:'🦥',   votes:0 },
+            { rank:28, symbol:'MEW',      name:"Cat in a Dog's World",emoji:'🐱',   votes:0 },
+            { rank:29, symbol:'HONK',     name:'Honk',                emoji:'🚗',   votes:0 },
+            { rank:30, symbol:'MBXR',     name:'Memeboxer',           emoji:'🥊',   votes:0 }
+        ];
+
+        let userVotesUsed = 0;
+        const maxVotesPerRound = 2;
+        let totalVoteCount = 0;
+
+        function getFighterImage(symbol, emoji, size=60) {
+            const p = fighterImages[symbol];
+            if (p) return `<img src="${p}" alt="${symbol}" onerror="this.src='${p.replace('.png','.jpg')}';this.onerror=function(){this.parentNode.innerHTML='${emoji}';};" style="width:${size}px;height:${size}px;object-fit:contain;border-radius:${size>40?'8px':'4px'};">`;
+            return emoji;
+        }
+
+        function loadExistingData() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEYS.votes);
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    if (data.coins && data.totalVotes !== undefined) {
+                        data.coins.forEach(sc => {
+                            const c = memeCoins.find(x => x.symbol === sc.symbol);
+                            if (c) c.votes = sc.votes || 0;
+                        });
+                        totalVoteCount = data.totalVotes || 0;
+                        userVotesUsed = data.userVotesUsed || 0;
+                    }
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        function saveVotingData() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.votes, JSON.stringify({
+                    coins: memeCoins, totalVotes: totalVoteCount,
+                    userVotesUsed, timestamp: new Date().toISOString()
+                }));
+                localStorage.setItem(STORAGE_KEYS.lastUpdate, new Date().toISOString());
+            } catch(e) {}
+        }
+
+        function saveBattleTimer(t) {
+            try { localStorage.setItem(STORAGE_KEYS.battleTimer, t); } catch(e) {}
+        }
+
+        function saveBattleHistory() {
+            try {
+                if (totalVoteCount === 0) return;
+                const history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]');
+                const winner = [...memeCoins].sort((a,b) => b.votes-a.votes)[0];
+                history.unshift({ timestamp: new Date().toISOString(), winner, totalVotes: totalVoteCount,
+                    topThree: [...memeCoins].sort((a,b)=>b.votes-a.votes).slice(0,3) });
+                if (history.length > 10) history.pop();
+                localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(history));
+            } catch(e) {}
+        }
+
+        function updateTimer() {
+            const timer = document.getElementById('battleTimer');
+            if (!timer) return;
+            let [h,m,s] = timer.textContent.split(':').map(Number);
+            s--;
+            if (s<0){s=59;m--;}
+            if (m<0){m=59;h--;}
+            if (h<0){h=0;m=29;s=45;resetVotes();}
+            const ts = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            timer.textContent = ts;
+            saveBattleTimer(ts);
+        }
+
+        function vote(symbol) {
+            if (userVotesUsed >= maxVotesPerRound) {
+                showMessage('You have used both votes this round! 🗳️'); return;
+            }
+            const coin = memeCoins.find(c => c.symbol === symbol);
+            if (coin) {
+                coin.votes++; totalVoteCount++; userVotesUsed++;
+                saveVotingData(); updateDisplay();
+                showMessage(`Vote ${userVotesUsed} of ${maxVotesPerRound} for ${coin.name}! 🥊`);
+                simulateOtherVotes();
+            }
+        }
+
+        function updateDisplay() {
+            const sorted = [...memeCoins].sort((a,b) => b.votes-a.votes);
+            document.getElementById('totalVotes').textContent = totalVoteCount;
+            updateTopSix(sorted.slice(0,6));
+            updateRemainingCoins(sorted.slice(6));
+            saveVotingData();
+        }
+
+        function updateTopSix(topCoins) {
+            const container = document.getElementById('topSix');
+            container.innerHTML = '';
+            topCoins.forEach((coin, index) => {
+                const pct = totalVoteCount > 0 ? Math.round(coin.votes/totalVoteCount*100) : 0;
+                const el = document.createElement('div');
+                el.className = `top-coin ${userVotesUsed>0&&coin.votes>0?'voted':''}`;
+                el.onclick = () => vote(coin.symbol);
+                el.innerHTML = `
+                    <div class="coin-rank">${index+1}</div>
+                    <div class="coin-symbol">${getFighterImage(coin.symbol,coin.emoji,60)}</div>
+                    <div class="coin-name">${coin.name}</div>
+                    <div class="vote-count">${coin.votes} votes</div>
+                    <div class="vote-percentage">${pct}%</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+                container.appendChild(el);
+            });
+        }
+
+        function updateRemainingCoins(remaining) {
+            const container = document.getElementById('remainingCoins');
+            container.innerHTML = '';
+            remaining.forEach(coin => {
+                const el = document.createElement('div');
+                el.className = `coin-item ${userVotesUsed>0&&coin.votes>0?'voted':''}`;
+                el.onclick = () => vote(coin.symbol);
+                el.innerHTML = `
+                    <div class="coin-info">
+                        <div class="coin-rank-small">${coin.rank}</div>
+                        <div class="coin-details">
+                            <div class="coin-emoji">${getFighterImage(coin.symbol,coin.emoji,28)}</div>
+                            <div class="coin-text">
+                                <div class="coin-name-small">${coin.name}</div>
+                                <div class="coin-symbol-small">${coin.symbol}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="coin-votes">${coin.votes}v</div>`;
+                container.appendChild(el);
+            });
+        }
+
+        function showMessage(message) {
+            document.querySelectorAll('.toast-popup').forEach(t => t.remove());
+            const popup = document.createElement('div');
+            popup.className = 'toast-popup';
+            popup.textContent = message;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 3000);
+        }
+
+        function simulateOtherVotes() {
+            const n = Math.floor(Math.random()*5)+3;
+            for (let i=0;i<n;i++) {
+                setTimeout(() => {
+                    const rc = memeCoins[Math.floor(Math.random()*memeCoins.length)];
+                    rc.votes++; totalVoteCount++; updateDisplay();
+                }, (i+1)*2000+Math.random()*3000);
+            }
+        }
+
+        function simulatePeriodicActivity() {
+            if (Math.random()>0.6) {
+                const rc = memeCoins[Math.floor(Math.random()*memeCoins.length)];
+                rc.votes++; totalVoteCount++; updateDisplay();
+            }
+        }
+
+        function resetVotes() {
+            saveBattleHistory();
+            memeCoins.forEach(c => c.votes=0);
+            totalVoteCount=0; userVotesUsed=0;
+            updateDisplay();
+            showMessage('🔄 New round started! Cast your votes!');
+        }
+
+        function updateStats() {
+            const el = document.getElementById('onlineNow');
+            if (el) {
+                let current = parseInt(el.textContent)||423;
+                current = Math.max(100, current + Math.floor(Math.random()*20)-10);
+                el.textContent = current;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadExistingData();
+            updateDisplay();
+            setInterval(updateTimer, 1000);
+            setInterval(simulatePeriodicActivity, 30000);
+            setInterval(updateStats, 20000);
+        });
+
+        if (window.innerWidth <= 768) document.body.style.overflowX = 'hidden';
+    </script>
+</body>
+</html>
