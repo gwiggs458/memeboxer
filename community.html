@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memeboxer Community Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background:
+                radial-gradient(circle at 50% 10%, rgba(232,0,26,0.22), transparent 35%),
+                radial-gradient(circle at 50% 70%, rgba(232,0,26,0.10), transparent 45%),
+                #000;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(232,0,26,0.5);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #f2f2f2;
+            font-family: 'Arial Black', Impact, sans-serif;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.4rem 0.7rem;
+            border-radius: 5px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.11em;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ffd700;
+            background: rgba(232,0,26,0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+            color: #f2f2f2;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            opacity: 0.7;
+            color: #aaa;
+            margin-bottom: 3rem;
+        }
+
+        /* Grid Layout */
+        .hub-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* News Feed */
+        .news-feed {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .news-item {
+            background: rgba(255,255,255,0.04);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #39ff14;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .news-item:hover {
+            transform: translateX(5px);
+            background: rgba(255,255,255,0.07);
+            border-left-color: #ffd700;
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-title { font-weight: bold; color: #ffd700; }
+        .news-time { font-size: 0.8rem; opacity: 0.6; }
+        .news-content { line-height: 1.5; margin-bottom: 0.5rem; color: #d4d4d4; font-size: 0.9rem; }
+        .news-source { font-size: 0.85rem; color: #39ff14; font-weight: bold; }
+
+        /* Community Panel */
+        .community-panel { display: flex; flex-direction: column; gap: 2rem; }
+
+        .panel-section {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            padding: 1.5rem;
+        }
+
+        .holder-benefits {
+            background: linear-gradient(135deg, rgba(232,0,26,0.12), rgba(0,0,0,0.6));
+            border: 1px solid rgba(232,0,26,0.4);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .stat-number { font-size: 1.5rem; font-weight: bold; color: #ffd700; font-family: 'Arial Black', Impact, sans-serif; }
+        .stat-label { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #e8001a, #9b0012);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Arial Black', Impact, sans-serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            box-shadow: 0 4px 20px rgba(232,0,26,0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(232,0,26,0.6);
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 2rem;
+            color: #ffd700;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        .refresh-btn {
+            background: rgba(57,255,20,0.15);
+            color: #39ff14;
+            border: 1px solid rgba(57,255,20,0.4);
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 1rem;
+        }
+
+        .refresh-btn:hover { background: rgba(57,255,20,0.25); }
+        .refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Message popup */
+        .message-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 10001;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+        }
+
+        .message-popup.success { background: linear-gradient(135deg, #39ff14, #00cc00); color: #000; }
+        .message-popup.info { background: linear-gradient(135deg, #ffd700, #e8a000); color: #000; }
+        .message-popup.show { opacity: 1; transform: translateX(0); }
+
+        /* Fun Zone */
+        .meme-gallery-section {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .social-link:hover {
+            background: rgba(232,0,26,0.12);
+            border-color: rgba(232,0,26,0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #777;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: #ffd700; }
+
+        .disclaimer {
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .copyright { color: #555; font-size: 0.8rem; margin-bottom: 0.4rem; }
+        .community-message { color: #e8001a; font-size: 0.8rem; font-style: italic; }
+
+        @keyframes fadeInNews {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hub-grid { grid-template-columns: 1fr; }
+            .page-title { font-size: 2rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .social-links { flex-direction: column; align-items: stretch; }
+            .footer-links { flex-direction: column; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="logo">
+                <div style="width:34px;height:34px;background:linear-gradient(135deg,#e8001a,#520008);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-right:10px;font-size:18px;box-shadow:0 0 16px rgba(232,0,26,0.5);">🥊</div>
+                MEMEBOXER
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="fighters-gallery.html">Fighters Gallery</a>
+                <a href="arena.html">Voting Arena</a>
+                <a href="community.html" class="active">Community</a>
+                <a href="#token">MBXR Token</a>
+                <a href="disclaimer.html">Disclaimer</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">
+            <div style="display:inline-flex;align-items:center;gap:15px;">
+                <div style="width:50px;height:50px;background:linear-gradient(135deg,#e8001a,#520008);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 20px rgba(232,0,26,0.5);">🥊</div>
+                <span>Community Hub</span>
+            </div>
+        </h1>
+        <p class="page-subtitle">Your playground for LIVE memecoin news and Memeboxer community updates</p>
+        <div style="text-align:center;margin-top:-15px;margin-bottom:30px;opacity:0.8;">
+            <span style="color:#39ff14;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:0.15em;">⚡ Polygon-powered community platform</span>
+        </div>
+
+        <div class="hub-grid">
+            <!-- News Feed -->
+            <section class="news-feed">
+                <h2 class="section-title">
+                    🔴 LIVE Crypto News Feed
+                    <button class="refresh-btn" onclick="refreshNews()">🔄 Refresh</button>
+                </h2>
+                <div class="news-container">
+                    <div class="news-item">
+                        <div class="news-header">
+                            <div class="news-title">🚀 Memeboxer Community Reaches New All-Time High</div>
+                            <div class="news-time">Just now</div>
+                        </div>
+                        <div class="news-content">Memeboxer sets new engagement records as community members participate in record numbers of voting battles...</div>
+                        <div class="news-source">🔴 LIVE: Memeboxer Official</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-header">
+                            <div class="news-title">📈 Entertainment Tokens Show Market Resilience</div>
+                            <div class="news-time">3h ago</div>
+                        </div>
+                        <div class="news-content">Community-driven meme tokens demonstrate strong holding patterns and active user engagement despite market volatility...</div>
+                        <div class="news-source">🔴 LIVE: Crypto Analytics</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Community Panel -->
+            <aside class="community-panel">
+                <!-- Memeboxer Token -->
+                <section class="panel-section holder-benefits">
+                    <h3 class="section-title" style="justify-content:center;color:#ffd700;">
+                        <div style="width:35px;height:35px;background:linear-gradient(135deg,#e8001a,#520008);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-right:8px;box-shadow:0 0 12px rgba(232,0,26,0.4);">🥊</div>
+                        MEMEBOXER
+                    </h3>
+                    <div style="text-align:center;margin-bottom:1.5rem;">
+                        <div style="width:120px;height:120px;margin:0 auto 1rem;background:linear-gradient(135deg,#e8001a,#520008);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:3rem;border:2px solid rgba(232,0,26,0.5);box-shadow:0 10px 30px rgba(232,0,26,0.3);">
+                            🥊
+                        </div>
+                        <div style="font-size:1.2rem;font-weight:bold;color:#ffd700;margin-bottom:0.5rem;font-family:'Arial Black',Impact,sans-serif;">Memeboxer</div>
+                        <div style="font-size:0.9rem;opacity:0.7;margin-bottom:1rem;">The ultimate meme boxing champion!</div>
+                        <div style="color:#39ff14;font-size:12px;margin-bottom:15px;font-weight:bold;text-transform:uppercase;letter-spacing:0.1em;">⚡ Native Polygon blockchain token</div>
+                        <a href="#token" class="submit-btn" style="text-decoration:none;display:inline-block;font-size:0.8rem;padding:0.8rem 1.5rem;">
+                            🚀 GET MBXR TOKENS
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Community Goals -->
+                <section class="panel-section">
+                    <h3 class="section-title">🎯 Community Goals</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">10K</div>
+                            <div class="stat-label">Discord Goal</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">25K</div>
+                            <div class="stat-label">X Followers Goal</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50K</div>
+                            <div class="stat-label">MBXR Holders Goal</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">1K</div>
+                            <div class="stat-label">Daily Voters Goal</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Suggest New Coin -->
+                <section class="panel-section">
+                    <h3 class="section-title">🎯 Suggest New Coin</h3>
+                    <div style="background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:12px;padding:1.5rem;">
+                        <div style="text-align:center;margin-bottom:1.5rem;">
+                            <div style="font-size:2.5rem;margin-bottom:1rem;">🚀</div>
+                            <h4 style="color:#39ff14;margin-bottom:0.5rem;font-size:1.1rem;">Got a Meme Coin Champion?</h4>
+                            <p style="margin-bottom:0;opacity:0.8;font-size:0.85rem;">Help us discover the next legendary fighter for the arena!</p>
+                        </div>
+                        <form class="submission-form" onsubmit="submitCoinEmail(event)">
+                            <div style="margin-bottom:0.8rem;">
+                                <label style="color:#39ff14;font-weight:bold;display:block;margin-bottom:0.3rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;">Coin Name:</label>
+                                <input type="text" placeholder="e.g., GekkoCash" required style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:6px;padding:0.7rem;color:white;font-family:inherit;font-size:0.9rem;">
+                            </div>
+                            <div style="margin-bottom:0.8rem;">
+                                <label style="color:#39ff14;font-weight:bold;display:block;margin-bottom:0.3rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;">Symbol:</label>
+                                <input type="text" placeholder="e.g., GEK" required style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:6px;padding:0.7rem;color:white;font-family:inherit;font-size:0.9rem;">
+                            </div>
+                            <div style="margin-bottom:1rem;">
+                                <label style="color:#39ff14;font-weight:bold;display:block;margin-bottom:0.3rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;">Why should we add it?</label>
+                                <textarea rows="3" placeholder="Tell us why this coin deserves a spot in the arena..." required style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:6px;padding:0.7rem;color:white;font-family:inherit;resize:vertical;font-size:0.9rem;"></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" style="width:100%;font-size:0.85rem;padding:0.9rem;">
+                                📮 Submit Suggestion
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <!-- Fun Zone -->
+        <section class="meme-gallery-section">
+            <h2 class="section-title">
+                <div style="width:35px;height:35px;background:linear-gradient(135deg,#e8001a,#520008);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-right:8px;">🥊</div>
+                The Memeboxer Fun Zone
+            </h2>
+            <div style="background:linear-gradient(135deg,rgba(232,0,26,0.1),rgba(57,255,20,0.06));border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:2rem;text-align:center;">
+                <div style="font-size:4rem;margin-bottom:1rem;">🥊</div>
+                <h3 style="color:#ffd700;margin-bottom:1rem;font-size:1.6rem;font-family:'Arial Black',Impact,sans-serif;">"Step into the ring. Vote for your champion. Rise to the top!"</h3>
+                <h4 style="color:#39ff14;margin-bottom:1.5rem;font-size:1.1rem;">Every round brings a new legend. Will yours be next?</h4>
+                <p style="margin-bottom:1.5rem;opacity:0.8;font-size:1rem;">Pure Entertainment in the Memeboxer Arena</p>
+                <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+                    <a href="arena.html" class="submit-btn" style="text-decoration:none;display:inline-block;">
+                        🗳️ Start Voting
+                    </a>
+                    <a href="#token" class="submit-btn" style="text-decoration:none;display:inline-block;background:linear-gradient(135deg,rgba(57,255,20,0.8),rgba(0,180,0,0.8));color:#000;box-shadow:0 4px 20px rgba(57,255,20,0.3);">
+                        🚀 Get MBXR Tokens
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Links -->
+        <section class="social-links">
+            <a href="#" class="social-link">
+                <span>💬</span>
+                <span>Join Discord</span>
+            </a>
+            <a href="https://x.com/Memeboxers" target="_blank" class="social-link">
+                <span>🐦</span>
+                <span>Follow on X</span>
+            </a>
+            <a href="#telegram" class="social-link">
+                <span>📱</span>
+                <span>Telegram</span>
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="fighters-gallery.html">Fighters Gallery</a>
+            <a href="arena.html">Voting Arena</a>
+            <a href="community.html">Community</a>
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+        </div>
+        <div class="disclaimer">
+            ⚠️ MBXR is a Polygon blockchain token for entertainment only. High risk of total loss. Not financial advice. 18+ only.
+        </div>
+        <div class="copyright">© 2026 Memeboxer (MBXR). All rights reserved.</div>
+        <div class="community-message">Built with ❤️ for the meme community</div>
+    </footer>
+
+    <script>
+        console.log('🚀 Initializing Memeboxer Community Hub...');
+
+        const LIVE_NEWS_CONFIG = {
+            rssFeeds: [
+                'https://cointelegraph.com/rss',
+                'https://decrypt.co/feed',
+                'https://www.coindesk.com/arc/outboundfeeds/rss/',
+                'https://cryptonews.com/rss.xml'
+            ],
+            proxyService: 'https://api.rss2json.com/v1/api.json?rss_url=',
+            cacheTimeout: 15 * 60 * 1000,
+            fallbackNews: [
+                {
+                    title: "🚀 Memeboxer Community Reaches New All-Time High",
+                    content: "Memeboxer sets new engagement records as community members participate in record numbers of voting battles and token governance decisions.",
+                    publishedAt: new Date().toISOString(),
+                    source: "Memeboxer Official",
+                    url: "index.html"
+                },
+                {
+                    title: "📈 Entertainment Tokens Show Market Resilience",
+                    content: "Community-driven meme tokens demonstrate strong holding patterns and active user engagement despite broader market volatility.",
+                    publishedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+                    source: "Crypto Analytics",
+                    url: "#"
+                },
+                {
+                    title: "🎭 Meme Culture Drives Crypto Innovation",
+                    content: "Research shows entertainment-focused blockchain projects lead in user retention and community engagement metrics across the industry.",
+                    publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+                    source: "Blockchain Research",
+                    url: "#"
+                }
+            ]
+        };
+
+        let liveNewsCache = [];
+        let lastLiveUpdate = 0;
+        let isLoadingNews = false;
+
+        async function loadLiveNews() {
+            if (isLoadingNews) return;
+            isLoadingNews = true;
+            const newsContainer = document.querySelector('.news-container');
+            if (!newsContainer) { isLoadingNews = false; return; }
+            showLiveLoading(true);
+            try {
+                const now = Date.now();
+                if (liveNewsCache.length > 0 && (now - lastLiveUpdate) < LIVE_NEWS_CONFIG.cacheTimeout) {
+                    displayLiveNews(liveNewsCache);
+                    showLiveLoading(false);
+                    isLoadingNews = false;
+                    return;
+                }
+                const liveNews = await fetchFreshNews();
+                if (liveNews && liveNews.length > 0) {
+                    liveNewsCache = liveNews;
+                    lastLiveUpdate = now;
+                    displayLiveNews(liveNews);
+                    showSuccessMessage('🔴 LIVE news updated!');
+                } else { throw new Error('No live news'); }
+            } catch (e) {
+                displayLiveNews(LIVE_NEWS_CONFIG.fallbackNews);
+                showInfoMessage('📰 Using cached news - refresh to try live feed');
+            }
+            showLiveLoading(false);
+            isLoadingNews = false;
+        }
+
+        async function fetchFreshNews() {
+            const all = [];
+            for (const rssUrl of LIVE_NEWS_CONFIG.rssFeeds) {
+                try {
+                    const articles = await fetchFromRSS(rssUrl);
+                    if (articles && articles.length > 0) all.push(...articles);
+                } catch(e) { continue; }
+            }
+            if (all.length >= 2) {
+                return all.filter(a => a.title && a.content)
+                    .sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+                    .slice(0,5)
+                    .map(a => ({ ...a, title: addCryptoEmojis(a.title), content: cleanContent(a.content) }));
+            }
+            return null;
+        }
+
+        async function fetchFromRSS(rssUrl) {
+            const proxyUrl = `${LIVE_NEWS_CONFIG.proxyService}${encodeURIComponent(rssUrl)}`;
+            const controller = new AbortController();
+            const tid = setTimeout(() => controller.abort(), 10000);
+            const response = await fetch(proxyUrl, { signal: controller.signal });
+            clearTimeout(tid);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            if (data.status !== 'ok' || !data.items) throw new Error('Invalid RSS');
+            return data.items
+                .filter(item => {
+                    if (!item.title) return false;
+                    const t = item.title.toLowerCase();
+                    return t.includes('crypto') || t.includes('bitcoin') || t.includes('meme') ||
+                           t.includes('token') || t.includes('coin') || t.includes('blockchain');
+                })
+                .slice(0,3)
+                .map(item => ({
+                    title: item.title,
+                    content: stripHtml(item.description || '').substring(0,200) + '...',
+                    publishedAt: item.pubDate,
+                    source: extractSourceName(rssUrl),
+                    url: item.link || '#'
+                }));
+        }
+
+        function addCryptoEmojis(title) {
+            if (!title) return '';
+            const map = { surge:'🚀', pump:'🚀', rise:'📈', gain:'📈', fall:'📉', drop:'📉', moon:'🌙', fire:'🔥', breaking:'🚨' };
+            const lower = title.toLowerCase();
+            for (const [k,e] of Object.entries(map)) {
+                if (lower.includes(k)) return `${e} ${title}`;
+            }
+            return `📰 ${title}`;
+        }
+
+        function stripHtml(html) {
+            const d = document.createElement('div');
+            d.innerHTML = html;
+            return d.textContent || '';
+        }
+
+        function cleanContent(c) { return c ? stripHtml(c).substring(0,180) + '...' : 'Click to read more...'; }
+
+        function extractSourceName(url) {
+            try {
+                const n = new URL(url).hostname.replace('www.','').split('.')[0];
+                return n.charAt(0).toUpperCase() + n.slice(1);
+            } catch { return 'Crypto News'; }
+        }
+
+        function formatTimeAgo(dateString) {
+            try {
+                const diff = Math.floor((new Date() - new Date(dateString)) / 60000);
+                if (diff < 60) return `${Math.max(1,diff)} min ago`;
+                if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
+                return `${Math.floor(diff/1440)}d ago`;
+            } catch { return 'Just now'; }
+        }
+
+        function displayLiveNews(newsArray) {
+            const c = document.querySelector('.news-container');
+            if (!c) return;
+            c.innerHTML = newsArray.map((a,i) => `
+                <div class="news-item" onclick="openLiveArticle('${a.url}')"
+                     style="animation-delay:${i*0.1}s;opacity:0;animation:fadeInNews 0.6s ease forwards;">
+                    <div class="news-header">
+                        <div class="news-title">${a.title}</div>
+                        <div class="news-time">${formatTimeAgo(a.publishedAt)}</div>
+                    </div>
+                    <div class="news-content">${a.content}</div>
+                    <div class="news-source">🔴 LIVE: ${a.source}</div>
+                </div>`).join('');
+        }
+
+        function showLiveLoading(show) {
+            const c = document.querySelector('.news-container');
+            if (!c || !show) return;
+            c.innerHTML = `<div class="loading-indicator">
+                <div style="font-size:2rem;margin-bottom:1rem;">📡</div>
+                <div>Loading LIVE Crypto News...</div>
+                <div style="font-size:0.85rem;opacity:0.6;margin-top:0.5rem;">Fetching from CoinTelegraph, Decrypt, CoinDesk...</div>
+            </div>`;
+        }
+
+        function openLiveArticle(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            } else {
+                showInfoMessage('📰 This is a news highlight!');
+            }
+        }
+
+        async function refreshLiveNews() {
+            liveNewsCache = []; lastLiveUpdate = 0;
+            const btn = document.querySelector('.refresh-btn');
+            if (btn) { btn.textContent = '🔄 Fetching...'; btn.disabled = true;
+                setTimeout(() => { btn.textContent = '🔄 Refresh'; btn.disabled = false; }, 4000); }
+            await loadLiveNews();
+        }
+
+        function submitCoinEmail(event) {
+            event.preventDefault();
+            const form = event.target;
+            const inputs = form.querySelectorAll('input');
+            const coinName = inputs[0].value;
+            const symbol = inputs[1].value;
+            const reason = form.querySelector('textarea').value;
+            const subject = encodeURIComponent(`Memeboxer Coin Suggestion: ${coinName} (${symbol})`);
+            const body = encodeURIComponent(`Coin Name: ${coinName}\nSymbol: ${symbol}\nReason: ${reason}\n\nSubmitted from: memeboxer.com\nTime: ${new Date().toLocaleString()}`);
+            window.open(`mailto:memeboxer@gmail.com?subject=${subject}&body=${body}`);
+            showSuccessMessage('📧 Email client opened!');
+            form.reset();
+        }
+
+        function showSuccessMessage(m) { showMessage(m, 'success'); }
+        function showInfoMessage(m) { showMessage(m, 'info'); }
+
+        function showMessage(message, type='success') {
+            const p = document.createElement('div');
+            p.className = `message-popup ${type}`;
+            p.textContent = message;
+            document.body.appendChild(p);
+            setTimeout(() => p.classList.add('show'), 100);
+            setTimeout(() => { p.classList.remove('show'); setTimeout(() => p.remove(), 300); }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadLiveNews();
+            setInterval(loadLiveNews, 15 * 60 * 1000);
+            showSuccessMessage('🔴 Memeboxer Community Hub loaded!');
+        });
+
+        function refreshNews() { refreshLiveNews(); }
+
+        window.refreshNews = refreshNews;
+        window.openLiveArticle = openLiveArticle;
+        window.submitCoinEmail = submitCoinEmail;
+    </script>
+</body>
+</html>
