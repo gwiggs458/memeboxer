@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Leaderboard - Memeboxer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background:
+                radial-gradient(circle at 50% 10%, rgba(232,0,26,0.22), transparent 35%),
+                radial-gradient(circle at 50% 70%, rgba(232,0,26,0.10), transparent 45%),
+                #000;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(232,0,26,0.5);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f2f2f2;
+            font-family: 'Arial Black', Impact, sans-serif;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.4rem 0.7rem;
+            border-radius: 5px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.11em;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ffd700;
+            background: rgba(232,0,26,0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+            color: #f2f2f2;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            opacity: 0.7;
+            color: #aaa;
+            margin-bottom: 2rem;
+        }
+
+        /* Live Status */
+        .live-status {
+            text-align: center;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: #39ff14;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .battle-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-card {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .info-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            font-family: 'Arial Black', Impact, sans-serif;
+            margin-bottom: 0.4rem;
+        }
+
+        .info-label {
+            font-size: 0.78rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* Podium */
+        .podium-section {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .podium-title {
+            text-align: center;
+            font-size: 1.6rem;
+            color: #ffd700;
+            margin-bottom: 2rem;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .podium-place {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 12px;
+            min-width: 200px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .podium-place:hover { transform: translateY(-5px); }
+
+        .first-place {
+            background: linear-gradient(135deg, #ffd700, #ffed4a);
+            color: #000;
+            height: 250px;
+            order: 2;
+        }
+
+        .second-place {
+            background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+            color: #000;
+            height: 200px;
+            order: 1;
+        }
+
+        .third-place {
+            background: linear-gradient(135deg, #cd7f32, #d4af37);
+            color: #000;
+            height: 180px;
+            order: 3;
+        }
+
+        .place-number { font-size: 2rem; font-weight: bold; margin-bottom: 0.5rem; }
+
+        .place-emoji {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .place-emoji img {
+            width: 60px; height: 60px;
+            object-fit: contain; border-radius: 10px;
+        }
+
+        .place-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.4rem; }
+        .place-votes { font-size: 0.95rem; opacity: 0.8; }
+        .place-percentage { font-size: 1rem; font-weight: bold; margin-top: 0.4rem; }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .table-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 2rem;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 150px;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            background: rgba(232,0,26,0.1);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #aaa;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 150px;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            margin-bottom: 0.4rem;
+            transition: all 0.2s ease;
+            align-items: center;
+            border: 1px solid transparent;
+        }
+
+        .table-row:hover {
+            background: rgba(232,0,26,0.06);
+            border-color: rgba(232,0,26,0.3);
+            transform: translateX(4px);
+        }
+
+        .rank-cell { text-align: center; font-weight: bold; font-size: 1rem; font-family: 'Arial Black', Impact, sans-serif; }
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        .rank-other { color: #aaa; }
+
+        .coin-cell { display: flex; align-items: center; gap: 0.75rem; }
+
+        .coin-emoji {
+            width: 38px; height: 38px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .coin-emoji img {
+            width: 38px; height: 38px;
+            object-fit: contain; border-radius: 7px;
+        }
+
+        .coin-info { flex: 1; }
+        .coin-name { font-weight: bold; margin-bottom: 0.15rem; font-size: 0.9rem; }
+        .coin-symbol { font-size: 0.78rem; opacity: 0.6; }
+
+        .votes-cell { text-align: center; font-weight: bold; color: #39ff14; font-size: 0.9rem; }
+        .percentage-cell { text-align: center; font-weight: bold; color: #ffd700; font-size: 0.9rem; }
+
+        .progress-bar-full {
+            width: 100%; height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px; overflow: hidden;
+        }
+
+        .progress-fill-full {
+            height: 100%;
+            background: linear-gradient(90deg, #e8001a, rgba(232,0,26,0.5));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Battle History */
+        .battle-history {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .history-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 2rem;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .history-item {
+            background: rgba(255,255,255,0.04);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid #39ff14;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .history-item-image {
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .history-item-image img {
+            width: 30px; height: 30px;
+            object-fit: contain; border-radius: 5px;
+        }
+
+        .history-item-content { flex: 1; }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #e8001a, #9b0012);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Arial Black', Impact, sans-serif;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 0 auto;
+            display: block;
+            margin-top: 2rem;
+            box-shadow: 0 4px 20px rgba(232,0,26,0.4);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(232,0,26,0.6);
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #777;
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: #ffd700; }
+
+        .disclaimer {
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .copyright { color: #555; font-size: 0.8rem; margin-bottom: 0.4rem; }
+        .community-message { color: #e8001a; font-size: 0.8rem; font-style: italic; }
+
+        @media (max-width: 768px) {
+            .page-title { font-size: 2rem; }
+            .podium { flex-direction: column; align-items: center; }
+            .podium-place { width: 100%; height: auto !important; min-height: 150px; order: unset !important; margin-bottom: 1rem; }
+            .table-header, .table-row { grid-template-columns: 60px 1fr 80px 80px; gap: 0.5rem; font-size: 0.85rem; }
+            .progress-cell { display: none; }
+            .battle-info { grid-template-columns: 1fr 1fr; }
+            .footer-links { flex-direction: column; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="logo">
+                <div style="width:34px;height:34px;background:linear-gradient(135deg,#e8001a,#520008);border-radius:7px;display:flex;align-items:center;justify-content:center;margin-right:10px;font-size:18px;box-shadow:0 0 16px rgba(232,0,26,0.5);">🥊</div>
+                MEMEBOXER
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="fighters-gallery.html">Fighters</a>
+                <a href="arena.html">Arena</a>
+                <a href="leaderboard.html" class="active">Leaderboard</a>
+                <a href="community.html">Community</a>
+                <a href="#token">MBXR</a>
+                <a href="disclaimer.html">Disclaimer</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">
+            <div style="display:inline-flex;align-items:center;gap:1rem;">
+                <div style="width:60px;height:60px;background:linear-gradient(135deg,#e8001a,#520008);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 0 20px rgba(232,0,26,0.5);">🥊</div>
+                Live Leaderboard
+            </div>
+        </h1>
+        <p class="page-subtitle">Real-time results from meme coin voting battles</p>
+        <div style="text-align:center;margin-top:-10px;margin-bottom:25px;opacity:0.8;">
+            <span style="color:#39ff14;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:0.15em;">⚡ MBXR powered by Polygon Blockchain</span>
+        </div>
+
+        <!-- Live Status -->
+        <section class="live-status">
+            <div class="status-indicator">
+                <div class="live-dot"></div>
+                <h2 style="font-family:'Arial Black',Impact,sans-serif;font-size:1.1rem;letter-spacing:0.1em;">🔴 LIVE VOTE DATA</h2>
+            </div>
+            <div class="battle-info">
+                <div class="info-card">
+                    <div class="info-number" id="totalVotesDisplay">0</div>
+                    <div class="info-label">Total Votes Cast</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-number" id="battleTimeRemaining">24:00:00</div>
+                    <div class="info-label">Time Remaining</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-number" id="leadingCoin">-</div>
+                    <div class="info-label">Current Leader</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-number" id="lastUpdate">Just now</div>
+                    <div class="info-label">Last Updated</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Podium -->
+        <section class="podium-section">
+            <h2 class="podium-title">🥇 Top 3 Champions</h2>
+            <div class="podium" id="podium"></div>
+        </section>
+
+        <!-- Full Leaderboard -->
+        <section class="leaderboard-table">
+            <h2 class="table-title">📊 Complete Rankings</h2>
+            <div class="table-header">
+                <div>Rank</div>
+                <div>Meme Coin</div>
+                <div>Votes</div>
+                <div>Share</div>
+                <div class="progress-cell">Progress</div>
+            </div>
+            <div id="leaderboardRows"></div>
+        </section>
+
+        <!-- Vote History -->
+        <section class="battle-history">
+            <h2 class="history-title">📜 Recent Vote History</h2>
+            <div id="battleHistory"></div>
+            <button onclick="refreshData()" class="refresh-btn">🔄 Refresh Data</button>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="fighters-gallery.html">Fighters</a>
+            <a href="arena.html">Arena</a>
+            <a href="community.html">Community</a>
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+        </div>
+        <div class="disclaimer">
+            ⚠️ MBXR is a Polygon blockchain token for entertainment only. High risk of total loss. Not financial advice. 18+ only.
+        </div>
+        <div class="copyright">© 2026 Memeboxer (MBXR). All rights reserved.</div>
+        <div class="community-message">Built with ❤️ for the meme community</div>
+    </footer>
+
+    <script>
+        const fighterImages = {
+            'DOGE':'images/fighters/dogecoin.png',
+            'SHIB':'images/fighters/shiba-inu.png',
+            'PEPE':'images/fighters/pepe.png',
+            'WIF':'images/fighters/dog-wif-hat.png',
+            'BONK':'images/fighters/bonk.png',
+            'FLOKI':'images/fighters/floki-inu.png',
+            'TRUMP':'images/fighters/maga-coin.png',
+            'BRETT':'images/fighters/brett.png',
+            'POPCAT':'images/fighters/popcat.png',
+            'MOG':'images/fighters/mog-coin.png',
+            'NEIRO':'images/fighters/neiro.png',
+            'TURBO':'images/fighters/turbo.png',
+            'MEME':'images/fighters/meme.png',
+            'CAT':'images/fighters/simons-cat.png',
+            'GOAT':'images/fighters/goatseus-maximus.png',
+            'PNUT':'images/fighters/peanut-squirrel.png',
+            'ACT':'images/fighters/act-ai-prophecy.png',
+            'PONKE':'images/fighters/ponke.png',
+            'MOODENG':'images/fighters/moo-deng.png',
+            'CHILLGUY':'images/fighters/chill-guy.png',
+            'BOME':'images/fighters/book-of-meme.png',
+            'MYRO':'images/fighters/myro.png',
+            'DOGS':'images/fighters/dogs.png',
+            'WEN':'images/fighters/wen.png',
+            'DEGEN':'images/fighters/degen.png',
+            'PEPU':'images/fighters/pepe-unchained.png',
+            'SLERF':'images/fighters/slerf.png',
+            'MEW':'images/fighters/cat-dogs-world.png',
+            'HONK':'images/fighters/honk.png',
+            'MBXR':'images/fighters/memeboxer.png'
+        };
+
+        function getFighterImage(symbol, emoji, size=40) {
+            const p = fighterImages[symbol];
+            if (p) return `<img src="${p}" alt="${symbol}" onerror="this.src='${p.replace('.png','.jpg')}';this.onerror=function(){this.parentNode.innerHTML='${emoji}';};" style="width:${size}px;height:${size}px;object-fit:contain;border-radius:${size>40?'10px':size>30?'7px':'5px'};">`;
+            return emoji;
+        }
+
+        const defaultMemeCoins = [
+            {rank:1,  symbol:'DOGE',     name:'Dogecoin',            emoji:'🐕',   votes:0},
+            {rank:2,  symbol:'SHIB',     name:'Shiba Inu',            emoji:'🐶',   votes:0},
+            {rank:3,  symbol:'PEPE',     name:'Pepe',                 emoji:'🐸',   votes:0},
+            {rank:4,  symbol:'WIF',      name:'Dogwifhat',            emoji:'🎩',   votes:0},
+            {rank:5,  symbol:'BONK',     name:'Bonk',                 emoji:'⚾',   votes:0},
+            {rank:6,  symbol:'FLOKI',    name:'Floki Inu',            emoji:'🗡️',  votes:0},
+            {rank:7,  symbol:'TRUMP',    name:'Official Trump',       emoji:'🇺🇸',  votes:0},
+            {rank:8,  symbol:'BRETT',    name:'Brett',                emoji:'👱',   votes:0},
+            {rank:9,  symbol:'POPCAT',   name:'Popcat',               emoji:'😺',   votes:0},
+            {rank:10, symbol:'MOG',      name:'Mog Coin',             emoji:'😼',   votes:0},
+            {rank:11, symbol:'NEIRO',    name:'Neiro',                emoji:'🐕‍🦺', votes:0},
+            {rank:12, symbol:'TURBO',    name:'Turbo',                emoji:'🏎️',  votes:0},
+            {rank:13, symbol:'MEME',     name:'Meme',                 emoji:'😂',   votes:0},
+            {rank:14, symbol:'CAT',      name:"Simon's Cat",          emoji:'🐱',   votes:0},
+            {rank:15, symbol:'GOAT',     name:'Goatseus Maximus',     emoji:'🐐',   votes:0},
+            {rank:16, symbol:'PNUT',     name:'Peanut',               emoji:'🥜',   votes:0},
+            {rank:17, symbol:'ACT',      name:'Act I',                emoji:'🎭',   votes:0},
+            {rank:18, symbol:'PONKE',    name:'Ponke',                emoji:'🐒',   votes:0},
+            {rank:19, symbol:'MOODENG',  name:'Moo Deng',             emoji:'🦛',   votes:0},
+            {rank:20, symbol:'CHILLGUY', name:'Chill Guy',            emoji:'😎',   votes:0},
+            {rank:21, symbol:'BOME',     name:'Book of Meme',         emoji:'📚',   votes:0},
+            {rank:22, symbol:'MYRO',     name:'Myro',                 emoji:'🐕',   votes:0},
+            {rank:23, symbol:'DOGS',     name:'Dogs',                 emoji:'🐕‍🦺', votes:0},
+            {rank:24, symbol:'WEN',      name:'Wen',                  emoji:'⏰',   votes:0},
+            {rank:25, symbol:'DEGEN',    name:'Degen',                emoji:'🎰',   votes:0},
+            {rank:26, symbol:'PEPU',     name:'Pepe Unchained',       emoji:'🐸',   votes:0},
+            {rank:27, symbol:'SLERF',    name:'Slerf',                emoji:'🦥',   votes:0},
+            {rank:28, symbol:'MEW',      name:"Cat in a Dog's World", emoji:'🐱',   votes:0},
+            {rank:29, symbol:'HONK',     name:'Honk',                 emoji:'🚗',   votes:0},
+            {rank:30, symbol:'MBXR',     name:'Memeboxer',            emoji:'🥊',   votes:0}
+        ];
+
+        let currentData = [...defaultMemeCoins];
+        let totalVotes = 0;
+
+        const SafeStorage = {
+            getItem: function(key) {
+                try { return localStorage.getItem(key); } catch(e) { return null; }
+            },
+            setItem: function(key, value) {
+                try { localStorage.setItem(key, value); return true; } catch(e) { return false; }
+            }
+        };
+
+        function loadVotingData() {
+            const stored = SafeStorage.getItem('mmbx_voting_data');
+            if (stored) {
+                try {
+                    const data = JSON.parse(stored);
+                    if (data && data.coins && Array.isArray(data.coins)) {
+                        currentData = data.coins;
+                        totalVotes = data.totalVotes || 0;
+                        return true;
+                    }
+                } catch(e) { console.error('Error parsing voting data:', e); }
+            }
+            currentData = [...defaultMemeCoins];
+            totalVotes = 0;
+            return false;
+        }
+
+        function updatePodium() {
+            const podium = document.getElementById('podium');
+            const sorted = [...currentData].sort((a,b) => (b.votes||0)-(a.votes||0));
+            const top3 = sorted.slice(0,3);
+
+            if (totalVotes === 0) {
+                podium.innerHTML = `<div style="text-align:center;padding:2rem;opacity:0.7;width:100%;">
+                    <p style="margin-bottom:1rem;">No votes yet — Battle starting soon! 🚀</p>
+                    <p style="font-size:0.9rem;">Visit the <a href="arena.html" style="color:#e8001a;">Arena</a> to start voting!</p>
+                </div>`;
+                return;
+            }
+
+            const places = ['second-place','first-place','third-place'];
+            const numbers = ['🥈','🥇','🥉'];
+
+            podium.innerHTML = top3.map((coin,i) => {
+                const votes = coin.votes || 0;
+                const pct = totalVotes > 0 ? Math.round(votes/totalVotes*100) : 0;
+                return `<div class="podium-place ${places[i]||'third-place'}">
+                    <div class="place-number">${numbers[i]||'🏅'}</div>
+                    <div class="place-emoji">${getFighterImage(coin.symbol,coin.emoji,60)}</div>
+                    <div class="place-name">${coin.name}</div>
+                    <div class="place-votes">${votes} votes</div>
+                    <div class="place-percentage">${pct}%</div>
+                </div>`;
+            }).join('');
+        }
+
+        function updateLeaderboard() {
+            const container = document.getElementById('leaderboardRows');
+            const sorted = [...currentData].sort((a,b) => (b.votes||0)-(a.votes||0));
+
+            if (totalVotes === 0) {
+                container.innerHTML = '<div style="text-align:center;padding:2rem;opacity:0.7;">Waiting for votes... Visit the Arena to vote! 🗳️</div>';
+                return;
+            }
+
+            container.innerHTML = sorted.map((coin,i) => {
+                const votes = coin.votes || 0;
+                const pct = totalVotes > 0 ? Math.round(votes/totalVotes*100) : 0;
+                const rank = i+1;
+                const rankClass = rank===1?'rank-1':rank===2?'rank-2':rank===3?'rank-3':'rank-other';
+                return `<div class="table-row">
+                    <div class="rank-cell ${rankClass}">#${rank}</div>
+                    <div class="coin-cell">
+                        <div class="coin-emoji">${getFighterImage(coin.symbol,coin.emoji,38)}</div>
+                        <div class="coin-info">
+                            <div class="coin-name">${coin.name}</div>
+                            <div class="coin-symbol">${coin.symbol}</div>
+                        </div>
+                    </div>
+                    <div class="votes-cell">${votes}</div>
+                    <div class="percentage-cell">${pct}%</div>
+                    <div class="progress-cell">
+                        <div class="progress-bar-full">
+                            <div class="progress-fill-full" style="width:${pct}%"></div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function updateLiveStats() {
+            const sorted = [...currentData].sort((a,b) => (b.votes||0)-(a.votes||0));
+            const leader = sorted[0];
+            document.getElementById('totalVotesDisplay').textContent = totalVotes;
+            document.getElementById('leadingCoin').textContent = leader && leader.votes > 0 ? leader.symbol : '-';
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+            const storedTimer = SafeStorage.getItem('mmbx_timer');
+            if (storedTimer && document.getElementById('battleTimeRemaining')) {
+                document.getElementById('battleTimeRemaining').textContent = storedTimer;
+            }
+        }
+
+        function updateBattleHistory() {
+            const historyEl = document.getElementById('battleHistory');
+            if (totalVotes === 0) {
+                historyEl.innerHTML = '<div style="text-align:center;opacity:0.7;padding:2rem;">Battle in progress... Vote now to make history! 🏆</div>';
+                return;
+            }
+            const sorted = [...currentData].sort((a,b) => (b.votes||0)-(a.votes||0)).slice(0,5);
+            historyEl.innerHTML = sorted.map((coin,i) => `
+                <div class="history-item">
+                    <div class="history-item-image">${getFighterImage(coin.symbol,coin.emoji,30)}</div>
+                    <div class="history-item-content">
+                        <strong>#${i+1} ${coin.name}</strong> — ${coin.votes} votes
+                        <div style="font-size:0.85rem;opacity:0.7;margin-top:0.4rem;">
+                            ${Math.round((coin.votes/totalVotes)*100)}% of total votes
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function updateAll() {
+            updatePodium();
+            updateLeaderboard();
+            updateLiveStats();
+            updateBattleHistory();
+        }
+
+        function refreshData() {
+            const success = loadVotingData();
+            updateAll();
+            const btn = event.target;
+            const orig = btn.textContent;
+            btn.textContent = success && totalVotes > 0 ? '✅ Data Refreshed!' : '📝 No votes yet';
+            setTimeout(() => { btn.textContent = orig; }, 2000);
+        }
+
+        function initialize() {
+            loadVotingData();
+            updateAll();
+            setInterval(() => { loadVotingData(); updateAll(); }, 3000);
+        }
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'mmbx_voting_data') { loadVotingData(); updateAll(); }
+        });
+
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
+</html>
