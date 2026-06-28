@@ -9,10 +9,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background:
-                radial-gradient(circle at 50% 10%, rgba(232,0,26,0.22), transparent 35%),
-                radial-gradient(circle at 50% 70%, rgba(232,0,26,0.10), transparent 45%),
-                #000;
+            background: #000;
             color: white;
             overflow-x: hidden;
             min-height: 100vh;
@@ -372,12 +369,9 @@
             </a>
             <div class="nav-links">
                 <a href="index.html">Home</a>
-                <a href="fighters-gallery.html">Fighters</a>
-                <a href="arena.html">Arena</a>
-                <a href="leaderboard.html">Leaderboard</a>
                 <a href="community.html" class="active">Community</a>
-                <a href="#token">MBXR</a>
-                <a href="disclaimer.html">Disclaimer</a>
+                <a href="#" id="mbxr-nav" style="color:#ffd700;">MBXR Token</a>
+                <a href="#footer-disclaimer">Disclaimer</a>
             </div>
         </nav>
     </header>
@@ -437,7 +431,7 @@
                         <div style="font-size:1.2rem;font-weight:bold;color:#ffd700;margin-bottom:0.5rem;font-family:'Arial Black',Impact,sans-serif;">Memeboxer</div>
                         <div style="font-size:0.9rem;opacity:0.7;margin-bottom:1rem;">The ultimate meme boxing champion!</div>
                         <div style="color:#39ff14;font-size:12px;margin-bottom:15px;font-weight:bold;text-transform:uppercase;letter-spacing:0.1em;">⚡ Native Polygon blockchain token</div>
-                        <a href="#token" class="submit-btn" style="text-decoration:none;display:inline-block;font-size:0.8rem;padding:0.8rem 1.5rem;">
+                        <a href="#" class="submit-btn" style="text-decoration:none;display:inline-block;font-size:0.8rem;padding:0.8rem 1.5rem;">
                             🚀 GET MBXR TOKENS
                         </a>
                     </div>
@@ -465,35 +459,6 @@
                         </div>
                     </div>
                 </section>
-
-                <!-- Suggest New Coin -->
-                <section class="panel-section">
-                    <h3 class="section-title">🎯 Suggest New Coin</h3>
-                    <div style="background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:12px;padding:1.5rem;">
-                        <div style="text-align:center;margin-bottom:1.5rem;">
-                            <div style="font-size:2.5rem;margin-bottom:1rem;">🚀</div>
-                            <h4 style="color:#39ff14;margin-bottom:0.5rem;font-size:1.1rem;">Got a Meme Coin Champion?</h4>
-                            <p style="margin-bottom:0;opacity:0.8;font-size:0.85rem;">Help us discover the next legendary fighter for the arena!</p>
-                        </div>
-                        <form class="submission-form" onsubmit="submitCoinEmail(event)">
-                            <div style="margin-bottom:0.8rem;">
-                                <label style="color:#39ff14;font-weight:bold;display:block;margin-bottom:0.3rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;">Coin Name:</label>
-                                <input type="text" placeholder="e.g., GekkoCash" required style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:6px;padding:0.7rem;color:white;font-family:inherit;font-size:0.9rem;">
-                            </div>
-                            <div style="margin-bottom:0.8rem;">
-                                <label style="color:#39ff14;font-weight:bold;display:block;margin-bottom:0.3rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;">Symbol:</label>
-                                <input type="text" placeholder="e.g., GEK" required style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:6px;padding:0.7rem;color:white;font-family:inherit;font-size:0.9rem;">
-                            </div>
-                            <div style="margin-bottom:1rem;">
-                                <label style="color:#39ff14;font-weight:bold;display:block;margin-bottom:0.3rem;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;">Why should we add it?</label>
-                                <textarea rows="3" placeholder="Tell us why this coin deserves a spot in the arena..." required style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(57,255,20,0.3);border-radius:6px;padding:0.7rem;color:white;font-family:inherit;resize:vertical;font-size:0.9rem;"></textarea>
-                            </div>
-                            <button type="submit" class="submit-btn" style="width:100%;font-size:0.85rem;padding:0.9rem;">
-                                📮 Submit Suggestion
-                            </button>
-                        </form>
-                    </div>
-                </section>
             </aside>
         </div>
 
@@ -509,10 +474,10 @@
                 <h4 style="color:#39ff14;margin-bottom:1.5rem;font-size:1.1rem;">Every round brings a new legend. Will yours be next?</h4>
                 <p style="margin-bottom:1.5rem;opacity:0.8;font-size:1rem;">Pure Entertainment in the Memeboxer Arena</p>
                 <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
-                    <a href="arena.html" class="submit-btn" style="text-decoration:none;display:inline-block;">
+                    <a href="index.html" class="submit-btn" style="text-decoration:none;display:inline-block;">
                         🗳️ Start Voting
                     </a>
-                    <a href="#token" class="submit-btn" style="text-decoration:none;display:inline-block;background:linear-gradient(135deg,rgba(57,255,20,0.8),rgba(0,180,0,0.8));color:#000;box-shadow:0 4px 20px rgba(57,255,20,0.3);">
+                    <a href="#" class="submit-btn" style="text-decoration:none;display:inline-block;background:linear-gradient(135deg,rgba(57,255,20,0.8),rgba(0,180,0,0.8));color:#000;box-shadow:0 4px 20px rgba(57,255,20,0.3);">
                         🚀 Get MBXR
                     </a>
                 </div>
@@ -537,21 +502,31 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" id="footer-disclaimer">
+
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:1rem 1.25rem;margin-bottom:1rem;font-size:0.85rem;color:#aaa;line-height:1.6;">
+            <strong style="color:#e8001a;">Entertainment only.</strong> MemeBoxer is a meme coin data tracker for fun. Votes are a popularity contest — not financial signals. Nothing on this site constitutes financial, legal, or investment advice. Crypto is highly volatile. Always do your own research.
+        </div>
+
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.25rem;margin-bottom:1.25rem;text-align:left;">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.13em;color:#555;text-transform:uppercase;margin-bottom:0.75rem;">Full Disclaimer</div>
+            <div style="font-size:0.75rem;color:#555;line-height:1.75;display:flex;flex-direction:column;gap:0.6rem;">
+                <p>MemeBoxer and the MBXR Token are meme projects created for entertainment purposes only and have no association with any stocks, equities, securities, indices, companies, or other financial or business entities. Any resemblance or association between MemeBoxer and any financial market or instrument is purely coincidental and intended for satirical or humorous purposes only.</p>
+                <p>All depictions of individuals, brands, or entities on this site are intended as parody or satire and should not be taken as factual representations. This website operates solely as a fan and community page dedicated to meme culture, with no affiliation to any official organization or entity.</p>
+                <p>This site also functions as a link directory for content relevant to the MemeBoxer community. Linking does not imply any endorsement, recommendation, or affiliation with the linked content or its creators. Any documents linked for listing, exchange, or regulatory purposes are hosted here for easy access only and do not constitute an endorsement or affiliation with any of the listed or cited entities.</p>
+                <p>MBXR Token is a meme token with no intrinsic value or expectation of financial return. By using this site, users acknowledge that all interactions and interpretations are at their own risk, and the site host assumes no liability for any user actions or assumptions based on the content presented. Users accept full responsibility for any and all losses, damages, or liabilities arising from their use of the site, including but not limited to financial losses, data loss, or any form of harm.</p>
+                <p>Any links to third-party websites are provided for convenience only. Users access such external sites at their own risk, with no liability to the host for any consequences resulting from third-party content or interactions. This site does not offer financial, legal, or professional advice. All content is intended solely for entertainment and should not be relied upon for financial, investment, or legal decisions.</p>
+                <p>The site host makes no guarantees regarding the accuracy, completeness, or currency of the information presented. All content is provided "as-is," without warranties of any kind, either expressed or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, or non-infringement. To the fullest extent permitted by law, the site host shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from or related to use of this site.</p>
+                <p>By using this site, users agree to indemnify and hold the site host harmless from any claims, damages, liabilities, and expenses arising from their use of the site or violation of these terms. The site host reserves the right to modify this disclaimer at any time, and continued use of the site constitutes acceptance of any updated terms.</p>
+            </div>
+        </div>
+
         <div class="footer-links">
-            <a href="index.html">Home</a>
-            <a href="fighters-gallery.html">Fighters</a>
-            <a href="arena.html">Arena</a>
+            <a href="https://www.coingecko.com" target="_blank" rel="noopener">Data: CoinGecko</a>
             <a href="community.html">Community</a>
-            <a href="disclaimer.html">Disclaimer</a>
-            <a href="terms.html">Terms</a>
-            <a href="privacy.html">Privacy</a>
+            <a href="index.html#disclaimer">Disclaimer</a>
         </div>
-        <div class="disclaimer">
-            ⚠️ MBXR is a Polygon blockchain token for entertainment only. High risk of total loss. Not financial advice. 18+ only.
-        </div>
-        <div class="copyright">© 2026 Memeboxer (MBXR). All rights reserved.</div>
-        <div class="community-message">Built with ❤️ for the meme community</div>
+        <div class="copyright" style="margin-top:0.75rem;">Live data via CoinGecko &middot; &copy; 2026 MemeBoxer. All rights reserved.</div>
     </footer>
 
     <script>
@@ -742,20 +717,6 @@
             await loadLiveNews();
         }
 
-        function submitCoinEmail(event) {
-            event.preventDefault();
-            const form = event.target;
-            const inputs = form.querySelectorAll('input');
-            const coinName = inputs[0].value;
-            const symbol = inputs[1].value;
-            const reason = form.querySelector('textarea').value;
-            const subject = encodeURIComponent(`Memeboxer Coin Suggestion: ${coinName} (${symbol})`);
-            const body = encodeURIComponent(`Coin Name: ${coinName}\nSymbol: ${symbol}\nReason: ${reason}\n\nSubmitted from: memeboxer.com\nTime: ${new Date().toLocaleString()}`);
-            window.open(`mailto:memeboxer@gmail.com?subject=${subject}&body=${body}`);
-            showSuccessMessage('📧 Email client opened!');
-            form.reset();
-        }
-
         function showSuccessMessage(m) { showMessage(m, 'success'); }
         function showInfoMessage(m) { showMessage(m, 'info'); }
 
@@ -778,7 +739,6 @@
 
         window.refreshNews = refreshNews;
         window.openLiveArticle = openLiveArticle;
-        window.submitCoinEmail = submitCoinEmail;
     </script>
 </body>
 </html>
