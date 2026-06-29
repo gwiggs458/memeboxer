@@ -9,216 +9,115 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:         #0a0a0a;
-      --bg-2:       #111111;
-      --bg-3:       #1a1a1a;
-      --bg-4:       #222222;
-      --text:       #f0ede6;
-      --text-2:     #a0a09a;
-      --text-3:     #5a5a56;
-      --border:     rgba(255,255,255,0.07);
-      --border-2:   rgba(255,255,255,0.14);
-      --red:        #E24B4A;
-      --green:      #1D9E75;
-      --gold:       #d4a843;
-      --gold-bg:    rgba(212,168,67,0.10);
-      --gold-border:rgba(212,168,67,0.30);
-      --vote-active:#7F77DD;
-      --vote-bg:    rgba(127,119,221,0.12);
+      --bg:#0a0a0a; --bg-2:#111111; --bg-3:#1a1a1a; --bg-4:#222222;
+      --text:#f0ede6; --text-2:#a0a09a; --text-3:#5a5a56;
+      --border:rgba(255,255,255,0.07); --border-2:rgba(255,255,255,0.14);
+      --red:#E24B4A; --green:#1D9E75;
+      --gold:#d4a843; --gold-bg:rgba(212,168,67,0.10); --gold-border:rgba(212,168,67,0.30);
+      --vote-active:#7F77DD; --vote-bg:rgba(127,119,221,0.12);
     }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ── NAV ───────────────────────────────────────────── */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--bg);
-      border-bottom: 0.5px solid var(--border-2);
-      padding: 0.85rem 0;
-    }
-    .nav-inner {
-      max-width: 1060px; margin: 0 auto; padding: 0 1.5rem;
-      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif; font-size: 26px;
-      letter-spacing: 2px; color: #c0c0c0; text-decoration: none;
-    }
-    .nav-logo span { color: var(--red); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { font-size: 13px; color: var(--text-2); text-decoration: none; letter-spacing: 0.03em; transition: color 0.15s; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a#mbxr-link { color: var(--gold); }
-    .nav-links a#mbxr-link:hover { color: #e8c060; }
-    .nav-live { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; padding: 4px 11px; border-radius: 2px; background: var(--red); color: #fff; }
-
-    /* ── CONTAINER ─────────────────────────────────────── */
-    .container { max-width: 1060px; margin: 0 auto; padding: 0 1.5rem 4rem; }
-
-    /* ── HERO ──────────────────────────────────────────── */
-    .hero {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      padding: 2.25rem 0 1.25rem; border-bottom: 1px solid var(--border-2);
-      margin-bottom: 1.5rem; gap: 1rem;
-    }
-    .wordmark { font-family: 'Bebas Neue', sans-serif; font-size: 76px; letter-spacing: 3px; line-height: 1; color: #c0c0c0; }
-    .wordmark span { color: var(--red); }
-    .hero-sub { font-size: 11px; letter-spacing: 0.18em; color: var(--text-3); margin-top: 8px; }
-    .hero-right { text-align: right; flex-shrink: 0; }
-    .live-badge { display: inline-block; background: var(--red); color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; padding: 5px 12px; border-radius: 2px; }
-    .last-updated { font-size: 11px; color: var(--text-3); margin-top: 6px; }
-
-    /* ── DAILY CHAMP BOX ───────────────────────────────── */
-    .champ-box {
-      background: var(--gold-bg);
-      border: 1px solid var(--gold-border);
-      border-radius: 10px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      flex-wrap: wrap;
-    }
-    .champ-crown { font-size: 36px; flex-shrink: 0; line-height: 1; }
-    .champ-label {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
-      color: var(--gold); margin-bottom: 4px;
-    }
-    .champ-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; line-height: 1; color: var(--text); }
-    .champ-meta { display: flex; align-items: center; gap: 12px; margin-top: 5px; flex-wrap: wrap; }
-    .champ-price { font-size: 14px; font-weight: 500; color: var(--text); }
-    .champ-votes {
-      font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
-      color: var(--gold); background: var(--gold-bg);
-      border: 0.5px solid var(--gold-border);
-      padding: 3px 10px; border-radius: 2px;
-    }
-    .champ-date { font-size: 11px; color: var(--text-3); }
-    .champ-img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--gold-border); }
-    .champ-empty { color: var(--text-3); font-size: 14px; }
-
-    /* ── STAT CARDS ────────────────────────────────────── */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.75rem; }
-    .stat-card { background: var(--bg-2); border: 0.5px solid var(--border); border-radius: 8px; padding: 1rem 1.1rem; }
-    .stat-label { font-size: 10px; letter-spacing: 0.13em; color: var(--text-3); margin-bottom: 6px; }
-    .stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 1px; line-height: 1; }
-    .stat-delta { font-size: 12px; font-weight: 500; margin-top: 4px; }
-    .up { color: var(--green); } .dn { color: var(--red); } .mute { color: var(--text-3); }
-
-    /* ── FILTER ROW ────────────────────────────────────── */
-    .filter-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 1.25rem; }
-    .filters { display: flex; gap: 6px; flex-wrap: wrap; }
-    .pill {
-      font-size: 12px; font-family: 'Inter', sans-serif; padding: 6px 16px; border-radius: 2px;
-      border: 0.5px solid var(--border-2); cursor: pointer; background: transparent;
-      color: var(--text-2); transition: all 0.14s;
-    }
-    .pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-    .pill:hover:not(.active) { background: var(--bg-3); color: var(--text); }
-    .coin-count { font-size: 12px; color: var(--text-3); white-space: nowrap; }
-
-    /* ── TABLE ─────────────────────────────────────────── */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 720px; }
-    thead th {
-      font-size: 10px; letter-spacing: 0.12em; color: var(--text-3); font-weight: 500;
-      text-align: left; padding: 8px 10px; border-bottom: 0.5px solid var(--border-2);
-      white-space: nowrap; cursor: pointer; user-select: none; transition: color 0.14s;
-    }
-    thead th:hover { color: var(--text-2); }
-    thead th.r { text-align: right; }
-    thead th.sorted { color: var(--text); }
-    .sort-arrow { margin-left: 3px; font-size: 9px; opacity: 0.5; }
-    tbody td { padding: 10px 10px; border-bottom: 0.5px solid var(--border); font-size: 13px; vertical-align: middle; }
-    tbody tr:hover td { background: var(--bg-2); }
-    tbody tr:last-child td { border-bottom: none; }
-
-    .col-rank { color: var(--text-3); font-size: 11px; width: 32px; }
-    .col-coin { display: flex; align-items: center; }
-    .coin-img { width: 28px; height: 28px; border-radius: 50%; margin-right: 10px; background: var(--bg-4); flex-shrink: 0; object-fit: cover; }
-    .coin-name-wrap { display: flex; align-items: baseline; gap: 5px; flex-wrap: wrap; }
-    .coin-name { font-weight: 500; color: var(--text); }
-    .coin-sym { font-size: 11px; color: var(--text-3); }
-    .champ-row-tag { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; color: var(--gold); background: var(--gold-bg); border: 0.5px solid var(--gold-border); padding: 2px 5px; border-radius: 2px; }
-    .col-price { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
-    .col-chg { text-align: right; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .col-mcap { text-align: right; font-size: 12px; color: var(--text-2); }
-    .col-vol { text-align: right; font-size: 12px; color: var(--text-2); }
-    .col-spark { text-align: right; }
-    .col-spark svg { display: block; margin-left: auto; }
-
-    /* ── VOTE COLUMN ───────────────────────────────────── */
-    .col-vote { text-align: right; white-space: nowrap; }
-    .vote-wrap { display: inline-flex; align-items: center; gap: 7px; }
-    .vote-count { font-size: 12px; font-weight: 600; color: var(--text-3); min-width: 20px; text-align: right; transition: color 0.2s; }
-    .vote-count.has-votes { color: var(--vote-active); }
-    .vote-btn {
-      font-size: 11px; font-family: 'Inter', sans-serif; font-weight: 600;
-      letter-spacing: 0.05em; padding: 5px 13px; border-radius: 2px;
-      border: 1px solid var(--border-2); background: transparent;
-      color: var(--text-2); cursor: pointer; transition: all 0.15s; white-space: nowrap;
-    }
-    .vote-btn:hover:not(:disabled) { border-color: var(--vote-active); color: var(--vote-active); background: var(--vote-bg); }
-    .vote-btn.voted {
-      border-color: var(--vote-active); color: var(--vote-active);
-      background: var(--vote-bg); cursor: default; opacity: 0.7;
-    }
-    .vote-btn:disabled { cursor: default; }
-
-    /* ── DETAILS LINK ──────────────────────────────────── */
-    .col-info { text-align: right; }
-    .info-link { font-size: 11px; font-weight: 500; color: var(--text-3); text-decoration: none; white-space: nowrap; transition: color 0.14s; }
-    .info-link:hover { color: var(--text-2); }
-
-    /* ── STATE ─────────────────────────────────────────── */
-    .state-msg { text-align: center; padding: 3.5rem 1rem; color: var(--text-3); font-size: 14px; line-height: 1.7; }
-    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border-2); border-top-color: var(--text-2); border-radius: 50%; animation: spin 0.75s linear infinite; vertical-align: middle; margin-right: 8px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── FOOTER ────────────────────────────────────────── */
-    footer {
-      margin-top: 2.5rem; padding-top: 1.25rem;
-      border-top: 0.5px solid var(--border-2);
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .footer-summary {
-      font-size: 12px; color: var(--text-2); line-height: 1.6;
-      padding: 10px 14px; border-radius: 6px;
-      border: 0.5px solid var(--border-2); background: var(--bg-2);
-    }
-    .footer-summary strong { color: var(--red); font-weight: 600; }
-    .footer-legal {
-      font-size: 10.5px; color: var(--text-3); line-height: 1.75;
-      padding: 14px 16px; border-radius: 6px;
-      border: 0.5px solid var(--border); background: var(--bg-2);
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .footer-legal-title {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
-      color: var(--text-3); margin-bottom: 4px;
-    }
-    .footer-legal p { margin: 0; }
-    .footer-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-bottom: 1rem; }
-    .footer-note { font-size: 11px; color: var(--text-3); }
-    .footer-links { display: flex; gap: 1.25rem; }
-    .footer-links a { font-size: 11px; color: var(--text-3); text-decoration: none; transition: color 0.14s; }
-    .footer-links a:hover { color: var(--text-2); }
-
-    /* ── RESPONSIVE ────────────────────────────────────── */
-    @media (max-width: 640px) {
-      .wordmark { font-size: 48px; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .stats .stat-card:last-child { grid-column: span 2; }
-      .nav-links { display: none; }
-      .champ-box { flex-direction: column; align-items: flex-start; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    nav { position:sticky; top:0; z-index:100; background:var(--bg); border-bottom:0.5px solid var(--border-2); padding:0.85rem 0; }
+    .nav-inner { max-width:1060px; margin:0 auto; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:2px; color:#c0c0c0; text-decoration:none; }
+    .nav-logo span { color:var(--red); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { font-size:13px; color:var(--text-2); text-decoration:none; letter-spacing:0.03em; transition:color 0.15s; }
+    .nav-links a:hover { color:var(--text); }
+    .nav-links a#mbxr-link { color:var(--gold); }
+    .nav-links a#mbxr-link:hover { color:#e8c060; }
+    .nav-live { font-size:10px; font-weight:600; letter-spacing:0.12em; padding:4px 11px; border-radius:2px; background:var(--red); color:#fff; }
+    .container { max-width:1060px; margin:0 auto; padding:0 1.5rem 4rem; }
+    .hero { display:flex; align-items:flex-end; justify-content:space-between; padding:2.25rem 0 1.25rem; border-bottom:1px solid var(--border-2); margin-bottom:1.5rem; gap:1rem; }
+    .wordmark { font-family:'Bebas Neue',sans-serif; font-size:76px; letter-spacing:3px; line-height:1; color:#c0c0c0; }
+    .wordmark span { color:var(--red); }
+    .hero-sub { font-size:11px; letter-spacing:0.18em; color:var(--text-3); margin-top:8px; }
+    .hero-right { text-align:right; flex-shrink:0; }
+    .live-badge { display:inline-block; background:var(--red); color:#fff; font-size:11px; font-weight:600; letter-spacing:0.1em; padding:5px 12px; border-radius:2px; }
+    .last-updated { font-size:11px; color:var(--text-3); margin-top:6px; }
+    .vote-budget-bar { display:flex; align-items:center; justify-content:space-between; background:var(--bg-2); border:0.5px solid var(--border-2); border-radius:8px; padding:0.75rem 1.25rem; margin-bottom:1.25rem; flex-wrap:wrap; gap:10px; }
+    .vote-budget-label { font-size:12px; color:var(--text-2); font-weight:500; }
+    .vote-budget-label strong { color:var(--text); }
+    .vote-pips { display:flex; gap:6px; }
+    .vote-pip { width:28px; height:28px; border-radius:50%; background:var(--vote-active); border:2px solid var(--vote-active); display:flex; align-items:center; justify-content:center; font-size:13px; transition:all 0.2s; }
+    .vote-pip.used { background:var(--bg-3); border-color:var(--border-2); }
+    .vote-budget-reset { font-size:11px; color:var(--text-3); }
+    .champ-box { background:var(--gold-bg); border:1px solid var(--gold-border); border-radius:10px; padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap; }
+    .champ-crown { font-size:36px; flex-shrink:0; line-height:1; }
+    .champ-label { font-size:10px; font-weight:600; letter-spacing:0.14em; color:var(--gold); margin-bottom:4px; }
+    .champ-name { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:1px; line-height:1; color:var(--text); }
+    .champ-meta { display:flex; align-items:center; gap:12px; margin-top:5px; flex-wrap:wrap; }
+    .champ-price { font-size:14px; font-weight:500; color:var(--text); }
+    .champ-votes { font-size:12px; font-weight:600; letter-spacing:0.06em; color:var(--gold); background:var(--gold-bg); border:0.5px solid var(--gold-border); padding:3px 10px; border-radius:2px; }
+    .champ-date { font-size:11px; color:var(--text-3); }
+    .champ-img { width:52px; height:52px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid var(--gold-border); }
+    .champ-empty { color:var(--text-3); font-size:14px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:1.75rem; }
+    .stat-card { background:var(--bg-2); border:0.5px solid var(--border); border-radius:8px; padding:1rem 1.1rem; }
+    .stat-label { font-size:10px; letter-spacing:0.13em; color:var(--text-3); margin-bottom:6px; }
+    .stat-val { font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:1px; line-height:1; }
+    .stat-delta { font-size:12px; font-weight:500; margin-top:4px; }
+    .up{color:var(--green);} .dn{color:var(--red);} .mute{color:var(--text-3);}
+    .filter-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:1.25rem; }
+    .filters { display:flex; gap:6px; flex-wrap:wrap; }
+    .pill { font-size:12px; font-family:'Inter',sans-serif; padding:6px 16px; border-radius:2px; border:0.5px solid var(--border-2); cursor:pointer; background:transparent; color:var(--text-2); transition:all 0.14s; }
+    .pill.active { background:var(--text); color:var(--bg); border-color:var(--text); }
+    .pill:hover:not(.active) { background:var(--bg-3); color:var(--text); }
+    .coin-count { font-size:12px; color:var(--text-3); white-space:nowrap; }
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; min-width:720px; }
+    thead th { font-size:10px; letter-spacing:0.12em; color:var(--text-3); font-weight:500; text-align:left; padding:8px 10px; border-bottom:0.5px solid var(--border-2); white-space:nowrap; cursor:pointer; user-select:none; transition:color 0.14s; }
+    thead th:hover { color:var(--text-2); }
+    thead th.r { text-align:right; }
+    thead th.sorted { color:var(--text); }
+    .sort-arrow { margin-left:3px; font-size:9px; opacity:0.5; }
+    tbody td { padding:10px; border-bottom:0.5px solid var(--border); font-size:13px; vertical-align:middle; }
+    tbody tr:hover td { background:var(--bg-2); }
+    tbody tr:last-child td { border-bottom:none; }
+    .col-rank { color:var(--text-3); font-size:11px; width:32px; }
+    .col-coin { display:flex; align-items:center; }
+    .coin-img { width:28px; height:28px; border-radius:50%; margin-right:10px; background:var(--bg-4); flex-shrink:0; object-fit:cover; }
+    .coin-name-wrap { display:flex; align-items:baseline; gap:5px; flex-wrap:wrap; }
+    .coin-name { font-weight:500; color:var(--text); }
+    .coin-sym { font-size:11px; color:var(--text-3); }
+    .champ-row-tag { font-size:9px; font-weight:600; letter-spacing:0.08em; color:var(--gold); background:var(--gold-bg); border:0.5px solid var(--gold-border); padding:2px 5px; border-radius:2px; }
+    .col-price { text-align:right; font-variant-numeric:tabular-nums; font-weight:500; }
+    .col-chg { text-align:right; font-size:12px; font-weight:500; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .col-mcap,.col-vol { text-align:right; font-size:12px; color:var(--text-2); }
+    .col-spark { text-align:right; }
+    .col-spark svg { display:block; margin-left:auto; }
+    .col-vote { text-align:right; white-space:nowrap; }
+    .vote-count { font-size:12px; font-weight:600; color:var(--text-3); min-width:20px; text-align:right; transition:color 0.2s; }
+    .vote-count.has-votes { color:var(--vote-active); }
+    .vote-btn { font-size:11px; font-family:'Inter',sans-serif; font-weight:600; letter-spacing:0.05em; padding:5px 13px; border-radius:2px; border:1px solid var(--border-2); background:transparent; color:var(--text-2); cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+    .vote-btn:hover:not(:disabled) { border-color:var(--vote-active); color:var(--vote-active); background:var(--vote-bg); }
+    .vote-btn.voted { border-color:var(--vote-active); color:var(--vote-active); background:var(--vote-bg); cursor:default; opacity:0.7; }
+    .vote-btn.depleted { border-color:var(--border); color:var(--text-3); cursor:not-allowed; opacity:0.4; }
+    .vote-btn:disabled { cursor:not-allowed; }
+    .col-info { text-align:right; }
+    .info-link { font-size:11px; font-weight:500; color:var(--text-3); text-decoration:none; white-space:nowrap; transition:color 0.14s; }
+    .info-link:hover { color:var(--text-2); }
+    .state-msg { text-align:center; padding:3.5rem 1rem; color:var(--text-3); font-size:14px; line-height:1.7; }
+    .spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--border-2); border-top-color:var(--text-2); border-radius:50%; animation:spin 0.75s linear infinite; vertical-align:middle; margin-right:8px; }
+    @keyframes spin { to{transform:rotate(360deg);} }
+    footer { margin-top:2.5rem; padding-top:1.25rem; border-top:0.5px solid var(--border-2); display:flex; flex-direction:column; gap:14px; }
+    .footer-summary { font-size:12px; color:var(--text-2); line-height:1.6; padding:10px 14px; border-radius:6px; border:0.5px solid var(--border-2); background:var(--bg-2); }
+    .footer-summary strong { color:var(--red); font-weight:600; }
+    .footer-legal { font-size:10.5px; color:var(--text-3); line-height:1.75; padding:14px 16px; border-radius:6px; border:0.5px solid var(--border); background:var(--bg-2); display:flex; flex-direction:column; gap:8px; }
+    .footer-legal-title { font-size:10px; font-weight:600; letter-spacing:0.12em; color:var(--text-3); margin-bottom:4px; }
+    .footer-legal p { margin:0; }
+    .footer-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-bottom:1rem; }
+    .footer-note { font-size:11px; color:var(--text-3); }
+    .footer-links { display:flex; gap:1.25rem; }
+    .footer-links a { font-size:11px; color:var(--text-3); text-decoration:none; transition:color 0.14s; }
+    .footer-links a:hover { color:var(--text-2); }
+    @media(max-width:640px){
+      .wordmark{font-size:48px;}
+      .stats{grid-template-columns:1fr 1fr;}
+      .stats .stat-card:last-child{grid-column:span 2;}
+      .nav-links{display:none;}
+      .champ-box{flex-direction:column;align-items:flex-start;}
     }
   </style>
 </head>
@@ -239,11 +138,11 @@
 
   <main class="container">
 
-    <!-- Hero -->
     <div class="hero">
       <div>
         <div class="wordmark" aria-label="MemeBoxer">MEME<span>BOXER</span></div>
         <div class="hero-sub">MEME COINS &middot; LIVE RANKINGS &middot; COMMUNITY VOTES</div>
+        <div class="hero-sub" style="margin-top:10px;font-size:12px;letter-spacing:0.10em;color:var(--text-2);">🏆 OFFICIAL INDEX — MBXR <span style="color:var(--red);">75</span> — Tracking the Top 75 Meme Coins</div>
       </div>
       <div class="hero-right">
         <div class="live-badge">🥊 LIVE RING</div>
@@ -251,7 +150,15 @@
       </div>
     </div>
 
-    <!-- Daily Vote Champ box -->
+    <div class="vote-budget-bar">
+      <div class="vote-budget-label">🥊 Daily votes — <strong><span id="votes-left">5</span> remaining</strong> today. Spread them or stack them on one coin.</div>
+      <div class="vote-pips" id="vote-pips">
+        <div class="vote-pip">🥊</div><div class="vote-pip">🥊</div><div class="vote-pip">🥊</div>
+        <div class="vote-pip">🥊</div><div class="vote-pip">🥊</div>
+      </div>
+      <div class="vote-budget-reset">Resets at midnight</div>
+    </div>
+
     <div class="champ-box" id="champ-box" aria-label="Daily vote champion">
       <div class="champ-crown">👑</div>
       <div>
@@ -273,7 +180,6 @@
       </div>
     </div>
 
-    <!-- Stat cards -->
     <div class="stats" role="region" aria-label="Market summary">
       <div class="stat-card">
         <div class="stat-label">TOTAL MEME MARKET CAP</div>
@@ -283,7 +189,7 @@
       <div class="stat-card">
         <div class="stat-label">24H TRADING VOLUME</div>
         <div class="stat-val" id="stat-vol">—</div>
-        <div class="stat-delta mute">Top 75 meme tokens</div>
+        <div class="stat-delta mute">MBXR <span style="color:var(--red);">75</span> Top Meme Tokens</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">TOP COIN BY MARKET CAP</div>
@@ -292,7 +198,6 @@
       </div>
     </div>
 
-    <!-- Filter row -->
     <div class="filter-row">
       <div class="filters" role="group" aria-label="Filter coins">
         <button class="pill active" onclick="setFilter(this,'all')">All fighters</button>
@@ -304,7 +209,6 @@
       <span class="coin-count" id="coin-count"></span>
     </div>
 
-    <!-- Coin table -->
     <div class="table-wrap" role="region" aria-label="Meme coin leaderboard">
       <table>
         <thead>
@@ -312,9 +216,9 @@
             <th class="col-rank">#</th>
             <th>Coin</th>
             <th class="r" onclick="sortBy('price')" id="th-price">Price <span class="sort-arrow" id="sa-price"></span></th>
-            <th class="r" onclick="sortBy('chg')"   id="th-chg">24h <span class="sort-arrow" id="sa-chg"></span></th>
-            <th class="r" onclick="sortBy('mcap')"  id="th-mcap">Market cap <span class="sort-arrow" id="sa-mcap"></span></th>
-            <th class="r" onclick="sortBy('vol')"   id="th-vol">24h vol <span class="sort-arrow" id="sa-vol"></span></th>
+            <th class="r" onclick="sortBy('chg')" id="th-chg">24h <span class="sort-arrow" id="sa-chg"></span></th>
+            <th class="r" onclick="sortBy('mcap')" id="th-mcap">Market cap <span class="sort-arrow" id="sa-mcap"></span></th>
+            <th class="r" onclick="sortBy('vol')" id="th-vol">24h vol <span class="sort-arrow" id="sa-vol"></span></th>
             <th class="r">7d</th>
             <th class="r" onclick="sortBy('votes')" id="th-votes">Votes <span class="sort-arrow" id="sa-votes"></span></th>
             <th class="r">Vote</th>
@@ -322,12 +226,11 @@
           </tr>
         </thead>
         <tbody id="coin-tbody">
-          <tr><td colspan="10"><div class="state-msg"><span class="spinner" aria-hidden="true"></span>Loading live data...</div></td></tr>
+          <tr><td colspan="10"><div class="state-msg"><span class="spinner"></span>Loading live data...</div></td></tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Footer -->
     <footer id="disclaimer">
       <div class="footer-summary">
         <strong>Entertainment only.</strong> MemeBoxer is a meme coin data tracker for fun. Votes are a popularity contest — not financial signals. Nothing on this site constitutes financial, legal, or investment advice. Crypto is highly volatile. Always do your own research.
@@ -354,298 +257,292 @@
 
   </main>
 
+  <!-- ── REGULAR SCRIPT: runs immediately, shows fallback data right away ── -->
   <script>
-    // ── CoinGecko — top 75 meme tokens ──────────────────────────────────────────
-    // Add your free demo key: append &x_cg_demo_api_key=YOUR_KEY
-    const API_PAGES = [
-      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=25&page=1&sparkline=true&price_change_percentage=24h',
-      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=25&page=2&sparkline=true&price_change_percentage=24h',
-      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=25&page=3&sparkline=true&price_change_percentage=24h',
-    ];
+    const VOTE_LIMIT = 5;
+    const TODAY = new Date().toISOString().slice(0,10);
 
-    // ── Fallback data (shown instantly) ─────────────────────────────────────────
     const FALLBACK = [
-      { market_cap_rank:1,  id:'dogecoin',            name:'Dogecoin',           symbol:'doge',     current_price:0.0994,      price_change_percentage_24h:0.13,  market_cap:15190000000, total_volume:892000000,  image:'https://assets.coingecko.com/coins/images/5/large/dogecoin.png',             sparkline_in_7d:{price:[9.2,9.5,9.8,9.4,9.7,9.9,9.8,10.1,9.9,9.7,9.8,9.9]} },
-      { market_cap_rank:2,  id:'shiba-inu',            name:'Shiba Inu',          symbol:'shib',     current_price:0.0000126,   price_change_percentage_24h:-1.44, market_cap:7430000000,  total_volume:310000000,  image:'https://assets.coingecko.com/coins/images/11939/large/shiba.png',             sparkline_in_7d:{price:[13.0,12.8,13.2,12.9,12.5,12.6,12.4,12.7,12.5,12.3,12.6,12.4]} },
-      { market_cap_rank:3,  id:'pepe',                 name:'Pepe',               symbol:'pepe',     current_price:0.00001047,  price_change_percentage_24h:5.82,  market_cap:4400000000,  total_volume:510000000,  image:'https://assets.coingecko.com/coins/images/29850/large/pepe-token.jpeg',      sparkline_in_7d:{price:[8.8,9.0,9.3,10.1,10.5,10.4,10.8,11.0,10.9,11.2,11.5,11.8]} },
-      { market_cap_rank:4,  id:'bonk',                 name:'Bonk',               symbol:'bonk',     current_price:0.00002314,  price_change_percentage_24h:11.3,  market_cap:1710000000,  total_volume:240000000,  image:'https://assets.coingecko.com/coins/images/28600/large/bonk.jpg',             sparkline_in_7d:{price:[18,20,22,23,23,23,24,25,24,26,27,28]} },
-      { market_cap_rank:5,  id:'dogwifcoin',           name:'dogwifhat',          symbol:'wif',      current_price:0.5842,      price_change_percentage_24h:-4.12, market_cap:580000000,   total_volume:98000000,   image:'https://assets.coingecko.com/coins/images/33566/large/dogwifhat.png',        sparkline_in_7d:{price:[60,58,61,57,56,58,57,55,56,54,58,56]} },
-      { market_cap_rank:6,  id:'floki',                name:'FLOKI',              symbol:'floki',    current_price:0.0001192,   price_change_percentage_24h:-2.91, market_cap:1150000000,  total_volume:88000000,   image:'https://assets.coingecko.com/coins/images/16746/large/PNG_image.png',        sparkline_in_7d:{price:[12.1,11.9,12.3,12.0,11.8,11.9,11.7,11.5,11.8,11.6,11.9,11.7]} },
-      { market_cap_rank:7,  id:'baby-doge-coin',       name:'Baby Doge Coin',     symbol:'babydoge', current_price:0.000000002, price_change_percentage_24h:8.47,  market_cap:890000000,   total_volume:62000000,   image:'https://assets.coingecko.com/coins/images/16125/large/Baby-Doge.png',        sparkline_in_7d:{price:[1.8,1.9,2.1,2.3,2.5,2.4,2.6,2.7,2.6,2.8,2.9,3.0]} },
-      { market_cap_rank:8,  id:'cat-in-a-dogs-world',  name:'Cat in a dogs world',symbol:'mew',     current_price:0.000005241, price_change_percentage_24h:3.67,  market_cap:520000000,   total_volume:44000000,   image:'https://assets.coingecko.com/coins/images/36440/large/MEW.jpg',              sparkline_in_7d:{price:[4.9,5.0,5.1,5.3,5.2,5.4,5.5,5.4,5.6,5.5,5.7,5.8]} },
-      { market_cap_rank:9,  id:'mog-coin',             name:'Mog Coin',           symbol:'mog',      current_price:0.000001823, price_change_percentage_24h:-6.21, market_cap:390000000,   total_volume:37000000,   image:'https://assets.coingecko.com/coins/images/31059/large/MOG_LOGO_%281%29.png', sparkline_in_7d:{price:[2.1,2.0,1.9,2.0,1.8,1.9,1.8,1.7,1.8,1.7,1.6,1.7]} },
-      { market_cap_rank:10, id:'turbo',                name:'Turbo',              symbol:'turbo',    current_price:0.004821,    price_change_percentage_24h:14.2,  market_cap:340000000,   total_volume:91000000,   image:'https://assets.coingecko.com/coins/images/30176/large/logo200.png',          sparkline_in_7d:{price:[3.8,4.0,4.3,4.5,4.4,4.6,4.8,5.0,4.9,5.1,5.3,5.5]} },
-      { market_cap_rank:11, id:'popcat',               name:'Popcat',             symbol:'popcat',   current_price:0.2841,      price_change_percentage_24h:2.33,  market_cap:280000000,   total_volume:29000000,   image:'https://assets.coingecko.com/coins/images/33760/large/image.png',            sparkline_in_7d:{price:[26,27,28,27,28,29,28,29,30,29,30,31]} },
-      { market_cap_rank:12, id:'book-of-meme',         name:'Book of Meme',       symbol:'bome',     current_price:0.002841,    price_change_percentage_24h:-3.88, market_cap:190000000,   total_volume:18000000,   image:'https://assets.coingecko.com/coins/images/36808/large/bome.png',             sparkline_in_7d:{price:[3.2,3.1,3.0,2.9,3.0,2.9,2.8,2.9,2.8,2.7,2.8,2.7]} },
+      {market_cap_rank:1,  id:'dogecoin',           name:'Dogecoin',            symbol:'doge',     current_price:0.0994,      price_change_percentage_24h:0.13,  market_cap:15190000000,total_volume:892000000, image:'https://assets.coingecko.com/coins/images/5/large/dogecoin.png',            sparkline_in_7d:{price:[9.2,9.5,9.8,9.4,9.7,9.9,9.8,10.1,9.9,9.7,9.8,9.9]}},
+      {market_cap_rank:2,  id:'shiba-inu',           name:'Shiba Inu',           symbol:'shib',     current_price:0.0000126,   price_change_percentage_24h:-1.44, market_cap:7430000000, total_volume:310000000, image:'https://assets.coingecko.com/coins/images/11939/large/shiba.png',            sparkline_in_7d:{price:[13.0,12.8,13.2,12.9,12.5,12.6,12.4,12.7,12.5,12.3,12.6,12.4]}},
+      {market_cap_rank:3,  id:'pepe',                name:'Pepe',                symbol:'pepe',     current_price:0.00001047,  price_change_percentage_24h:5.82,  market_cap:4400000000, total_volume:510000000, image:'https://assets.coingecko.com/coins/images/29850/large/pepe-token.jpeg',     sparkline_in_7d:{price:[8.8,9.0,9.3,10.1,10.5,10.4,10.8,11.0,10.9,11.2,11.5,11.8]}},
+      {market_cap_rank:4,  id:'bonk',                name:'Bonk',                symbol:'bonk',     current_price:0.00002314,  price_change_percentage_24h:11.3,  market_cap:1710000000, total_volume:240000000, image:'https://assets.coingecko.com/coins/images/28600/large/bonk.jpg',            sparkline_in_7d:{price:[18,20,22,23,23,23,24,25,24,26,27,28]}},
+      {market_cap_rank:5,  id:'dogwifcoin',          name:'dogwifhat',           symbol:'wif',      current_price:0.5842,      price_change_percentage_24h:-4.12, market_cap:580000000,  total_volume:98000000,  image:'https://assets.coingecko.com/coins/images/33566/large/dogwifhat.png',       sparkline_in_7d:{price:[60,58,61,57,56,58,57,55,56,54,58,56]}},
+      {market_cap_rank:6,  id:'floki',               name:'FLOKI',               symbol:'floki',    current_price:0.0001192,   price_change_percentage_24h:-2.91, market_cap:1150000000, total_volume:88000000,  image:'https://assets.coingecko.com/coins/images/16746/large/PNG_image.png',       sparkline_in_7d:{price:[12.1,11.9,12.3,12.0,11.8,11.9,11.7,11.5,11.8,11.6,11.9,11.7]}},
+      {market_cap_rank:7,  id:'baby-doge-coin',      name:'Baby Doge Coin',      symbol:'babydoge', current_price:0.000000002, price_change_percentage_24h:8.47,  market_cap:890000000,  total_volume:62000000,  image:'https://assets.coingecko.com/coins/images/16125/large/Baby-Doge.png',       sparkline_in_7d:{price:[1.8,1.9,2.1,2.3,2.5,2.4,2.6,2.7,2.6,2.8,2.9,3.0]}},
+      {market_cap_rank:8,  id:'cat-in-a-dogs-world', name:'Cat in a dogs world', symbol:'mew',      current_price:0.000005241, price_change_percentage_24h:3.67,  market_cap:520000000,  total_volume:44000000,  image:'https://assets.coingecko.com/coins/images/36440/large/MEW.jpg',             sparkline_in_7d:{price:[4.9,5.0,5.1,5.3,5.2,5.4,5.5,5.4,5.6,5.5,5.7,5.8]}},
+      {market_cap_rank:9,  id:'mog-coin',            name:'Mog Coin',            symbol:'mog',      current_price:0.000001823, price_change_percentage_24h:-6.21, market_cap:390000000,  total_volume:37000000,  image:'https://assets.coingecko.com/coins/images/31059/large/MOG_LOGO_%281%29.png',sparkline_in_7d:{price:[2.1,2.0,1.9,2.0,1.8,1.9,1.8,1.7,1.8,1.7,1.6,1.7]}},
+      {market_cap_rank:10, id:'turbo',               name:'Turbo',               symbol:'turbo',    current_price:0.004821,    price_change_percentage_24h:14.2,  market_cap:340000000,  total_volume:91000000,  image:'https://assets.coingecko.com/coins/images/30176/large/logo200.png',         sparkline_in_7d:{price:[3.8,4.0,4.3,4.5,4.4,4.6,4.8,5.0,4.9,5.1,5.3,5.5]}},
+      {market_cap_rank:11, id:'popcat',              name:'Popcat',              symbol:'popcat',   current_price:0.2841,      price_change_percentage_24h:2.33,  market_cap:280000000,  total_volume:29000000,  image:'https://assets.coingecko.com/coins/images/33760/large/image.png',           sparkline_in_7d:{price:[26,27,28,27,28,29,28,29,30,29,30,31]}},
+      {market_cap_rank:12, id:'book-of-meme',        name:'Book of Meme',        symbol:'bome',     current_price:0.002841,    price_change_percentage_24h:-3.88, market_cap:190000000,  total_volume:18000000,  image:'https://assets.coingecko.com/coins/images/36808/large/bome.png',            sparkline_in_7d:{price:[3.2,3.1,3.0,2.9,3.0,2.9,2.8,2.9,2.8,2.7,2.8,2.7]}},
     ];
 
-    // ── Vote state (localStorage, resets daily) ──────────────────────────────────
-    const TODAY = new Date().toISOString().slice(0, 10); // "2026-06-27"
+    // ── Global state ──────────────────────────────────────────────────────────────
+    window.MB = {
+      coins: [],
+      votes: {},          // live votes from Firebase
+      filter: 'all',
+      sortCol: null,
+      sortDir: -1,
+      firebaseCastVote: null  // assigned once Firebase module loads
+    };
 
-    function getVoteData() {
+    // ── Local vote state ──────────────────────────────────────────────────────────
+    function getLocal() {
       try {
-        const raw = localStorage.getItem('mb_votes');
-        if (!raw) return { date: TODAY, votes: {}, voted: {} };
-        const d = JSON.parse(raw);
-        if (d.date !== TODAY) return { date: TODAY, votes: {}, voted: {} }; // new day — reset
+        const d = JSON.parse(localStorage.getItem('mb_v2')||'{}');
+        if (d.date !== TODAY) return {date:TODAY,used:0,voted:{}};
         return d;
-      } catch { return { date: TODAY, votes: {}, voted: {} }; }
+      } catch { return {date:TODAY,used:0,voted:{}}; }
     }
+    function saveLocal(d) { try{localStorage.setItem('mb_v2',JSON.stringify(d));}catch{} }
 
-    function saveVoteData(d) {
-      try { localStorage.setItem('mb_votes', JSON.stringify(d)); } catch {}
+    // ── Budget UI ─────────────────────────────────────────────────────────────────
+    function updateBudgetUI() {
+      const s = getLocal();
+      const left = VOTE_LIMIT - s.used;
+      document.getElementById('votes-left').textContent = left;
+      document.querySelectorAll('.vote-pip').forEach((p,i) => {
+        if (i < left) { p.classList.remove('used'); p.textContent='🥊'; }
+        else          { p.classList.add('used');    p.textContent=''; }
+      });
     }
-
-    function castVote(coinId) {
-      const d = getVoteData();
-      if (d.voted[coinId]) return false; // already voted today
-      d.votes[coinId] = (d.votes[coinId] || 0) + 1;
-      d.voted[coinId] = true;
-      saveVoteData(d);
-      return true;
-    }
-
-    function getVotes(coinId) {
-      return getVoteData().votes[coinId] || 0;
-    }
-
-    function hasVoted(coinId) {
-      return !!getVoteData().voted[coinId];
-    }
-
-    // ── Update Daily Champ box ────────────────────────────────────────────────────
-    function updateChampBox() {
-      const d = getVoteData();
-      const entries = Object.entries(d.votes);
-      const champLabel = document.getElementById('champ-label');
-      const champEmpty = document.getElementById('champ-empty');
-      const champDetail = document.getElementById('champ-detail');
-
-      const dateStr = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-      champLabel.textContent = 'VOTE CHAMP — ' + dateStr;
-
-      if (!entries.length || !allCoins.length) {
-        champEmpty.style.display = '';
-        champDetail.style.display = 'none';
-        return;
-      }
-
-      entries.sort((a, b) => b[1] - a[1]);
-      const [champId, champVotes] = entries[0];
-      const coin = allCoins.find(c => c.id === champId);
-      if (!coin) return;
-
-      champEmpty.style.display = 'none';
-      champDetail.style.display = '';
-      document.getElementById('champ-img').src = coin.image;
-      document.getElementById('champ-img').alt = coin.name;
-      document.getElementById('champ-name').textContent = coin.name;
-      document.getElementById('champ-price').textContent = fmtPrice(coin.current_price);
-      document.getElementById('champ-votes').textContent = '🥊 ' + champVotes + ' vote' + (champVotes !== 1 ? 's' : '');
-      document.getElementById('champ-date-tag').textContent = dateStr;
-    }
-
-    // ── App state ─────────────────────────────────────────────────────────────────
-    let allCoins = [], currentFilter = 'all', sortCol = null, sortDir = -1;
 
     // ── Formatters ────────────────────────────────────────────────────────────────
     function fmtPrice(p) {
-      if (p == null) return '—';
-      if (p >= 1000)     return '$' + p.toLocaleString('en-US', { maximumFractionDigits: 2 });
-      if (p >= 1)        return '$' + p.toFixed(4);
-      if (p >= 0.01)     return '$' + p.toFixed(5);
-      if (p >= 0.0001)   return '$' + p.toFixed(6);
-      if (p >= 0.000001) return '$' + p.toFixed(8);
-      return '$' + p.toExponential(2);
+      if (p==null) return '—';
+      if (p>=1000) return '$'+p.toLocaleString('en-US',{maximumFractionDigits:2});
+      if (p>=1)    return '$'+p.toFixed(4);
+      if (p>=0.01) return '$'+p.toFixed(5);
+      if (p>=0.0001) return '$'+p.toFixed(6);
+      if (p>=0.000001) return '$'+p.toFixed(8);
+      return '$'+p.toExponential(2);
     }
     function fmtLarge(n) {
-      if (n == null) return '—';
-      if (n >= 1e12) return '$' + (n / 1e12).toFixed(2) + 'T';
-      if (n >= 1e9)  return '$' + (n / 1e9).toFixed(2)  + 'B';
-      if (n >= 1e6)  return '$' + (n / 1e6).toFixed(1)  + 'M';
-      return '$' + n.toLocaleString();
+      if (n==null) return '—';
+      if (n>=1e12) return '$'+(n/1e12).toFixed(2)+'T';
+      if (n>=1e9)  return '$'+(n/1e9).toFixed(2)+'B';
+      if (n>=1e6)  return '$'+(n/1e6).toFixed(1)+'M';
+      return '$'+n.toLocaleString();
     }
     function fmtChg(c) {
-      if (c == null) return { text: '—', cls: 'mute' };
-      const up = c >= 0;
-      return { text: (up ? '▲ ' : '▼ ') + Math.abs(c).toFixed(2) + '%', cls: up ? 'up' : 'dn' };
+      if (c==null) return {text:'—',cls:'mute'};
+      return {text:(c>=0?'▲ ':'▼ ')+Math.abs(c).toFixed(2)+'%', cls:c>=0?'up':'dn'};
     }
-    function sparkSvg(data, up) {
-      if (!data || data.length < 2) return '';
-      const W = 64, H = 26, P = 2;
-      const step = Math.max(1, Math.floor(data.length / 20));
-      const pts  = data.filter((_, i) => i % step === 0).slice(-20);
-      const mn = Math.min(...pts), mx = Math.max(...pts), rng = mx - mn || 1;
-      const coords = pts.map((v, i) => {
-        const x = P + (i / (pts.length - 1)) * (W - 2 * P);
-        const y = H - P - ((v - mn) / rng) * (H - 2 * P);
-        return x.toFixed(1) + ',' + y.toFixed(1);
+    function sparkSvg(data,up) {
+      if (!data||data.length<2) return '';
+      const W=64,H=26,P=2;
+      const step=Math.max(1,Math.floor(data.length/20));
+      const pts=data.filter((_,i)=>i%step===0).slice(-20);
+      const mn=Math.min(...pts),mx=Math.max(...pts),rng=mx-mn||1;
+      const coords=pts.map((v,i)=>{
+        const x=P+(i/(pts.length-1))*(W-2*P);
+        const y=H-P-((v-mn)/rng)*(H-2*P);
+        return x.toFixed(1)+','+y.toFixed(1);
       }).join(' ');
-      const col = up ? '#1D9E75' : '#E24B4A';
-      return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true">' +
-        '<polyline points="' + coords + '" fill="none" stroke="' + col + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+      return '<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" aria-hidden="true"><polyline points="'+coords+'" fill="none" stroke="'+(up?'#1D9E75':'#E24B4A')+'" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
     }
 
-    // ── Render ────────────────────────────────────────────────────────────────────
+    // ── Render table ──────────────────────────────────────────────────────────────
     function renderCoins(list) {
       const tbody = document.getElementById('coin-tbody');
-      document.getElementById('coin-count').textContent = list.length + ' coin' + (list.length !== 1 ? 's' : '');
-      if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="10"><div class="state-msg">No coins match this filter.</div></td></tr>';
-        return;
-      }
-      const d = getVoteData();
-      tbody.innerHTML = list.map((c, i) => {
-        const chg     = fmtChg(c.price_change_percentage_24h);
-        const up      = (c.price_change_percentage_24h || 0) >= 0;
-        const spark   = c.sparkline_in_7d && c.sparkline_in_7d.price ? sparkSvg(c.sparkline_in_7d.price, up) : '';
-        const votes   = d.votes[c.id] || 0;
-        const voted   = !!d.voted[c.id];
-        const isChamp = votes > 0 && Object.entries(d.votes).sort((a,b)=>b[1]-a[1])[0]?.[0] === c.id;
-
-        return '<tr>' +
-          '<td class="col-rank">' + (c.market_cap_rank || i + 1) + '</td>' +
-          '<td><div class="col-coin">' +
-            '<img class="coin-img" src="' + c.image + '" alt="' + c.name + '" width="28" height="28" loading="lazy" onerror="this.style.display=\'none\'" />' +
-            '<div class="coin-name-wrap">' +
-              '<span class="coin-name">' + c.name + '</span>' +
-              '<span class="coin-sym">' + c.symbol.toUpperCase() + '</span>' +
-              (isChamp ? '<span class="champ-row-tag">👑 CHAMP</span>' : '') +
-            '</div></div></td>' +
-          '<td class="col-price">' + fmtPrice(c.current_price) + '</td>' +
-          '<td class="col-chg ' + chg.cls + '">' + chg.text + '</td>' +
-          '<td class="col-mcap">' + fmtLarge(c.market_cap) + '</td>' +
-          '<td class="col-vol">' + fmtLarge(c.total_volume) + '</td>' +
-          '<td class="col-spark">' + spark + '</td>' +
-          '<td class="col-vote" style="text-align:right;">' +
-            '<span class="vote-count' + (votes > 0 ? ' has-votes' : '') + '" id="vc-' + c.id + '">' + (votes || '') + '</span>' +
-          '</td>' +
-          '<td class="col-vote">' +
-            '<button class="vote-btn' + (voted ? ' voted' : '') + '" id="vb-' + c.id + '" ' +
-              (voted ? 'disabled ' : '') +
-              'onclick="handleVote(\'' + c.id + '\')" ' +
-              'aria-label="Vote for ' + c.name + '">' +
-              (voted ? '✓ Voted' : '🥊 Vote Champ') +
-            '</button>' +
-          '</td>' +
-          '<td class="col-info"><a class="info-link" href="https://www.coingecko.com/en/coins/' + c.id + '" target="_blank" rel="noopener">Details ↗</a></td>' +
+      document.getElementById('coin-count').textContent = list.length+' coin'+(list.length!==1?'s':'');
+      if (!list.length) { tbody.innerHTML='<tr><td colspan="10"><div class="state-msg">No coins match this filter.</div></td></tr>'; return; }
+      const s=getLocal(), fv=window.MB.votes, outOfVotes=s.used>=VOTE_LIMIT;
+      const topEntry=Object.entries(fv).sort((a,b)=>b[1]-a[1])[0];
+      tbody.innerHTML=list.map((c,i)=>{
+        const chg=fmtChg(c.price_change_percentage_24h);
+        const up=(c.price_change_percentage_24h||0)>=0;
+        const spark=c.sparkline_in_7d?.price?sparkSvg(c.sparkline_in_7d.price,up):'';
+        const votes=fv[c.id]||0, voted=!!s.voted[c.id];
+        const isChamp=topEntry&&topEntry[0]===c.id&&votes>0;
+        const btnClass=voted?'voted':outOfVotes?'depleted':'';
+        const btnText=voted?'✓ Voted':outOfVotes?'No votes left':'🥊 Vote Champ';
+        const dis=voted||outOfVotes?'disabled':'';
+        return '<tr>'+
+          '<td class="col-rank">'+(c.market_cap_rank||i+1)+'</td>'+
+          '<td><div class="col-coin">'+
+            '<img class="coin-img" src="'+c.image+'" alt="'+c.name+'" width="28" height="28" loading="lazy" onerror="this.style.display=\'none\'"/>'+
+            '<div class="coin-name-wrap">'+
+              '<span class="coin-name">'+c.name+'</span>'+
+              '<span class="coin-sym">'+c.symbol.toUpperCase()+'</span>'+
+              (isChamp?'<span class="champ-row-tag">👑 CHAMP</span>':'')+
+            '</div></div></td>'+
+          '<td class="col-price">'+fmtPrice(c.current_price)+'</td>'+
+          '<td class="col-chg '+chg.cls+'">'+chg.text+'</td>'+
+          '<td class="col-mcap">'+fmtLarge(c.market_cap)+'</td>'+
+          '<td class="col-vol">'+fmtLarge(c.total_volume)+'</td>'+
+          '<td class="col-spark">'+spark+'</td>'+
+          '<td class="col-vote" style="text-align:right;"><span class="vote-count'+(votes>0?' has-votes':'')+'" id="vc-'+c.id+'">'+(votes||'')+'</span></td>'+
+          '<td class="col-vote"><button class="vote-btn '+btnClass+'" id="vb-'+c.id+'" '+dis+' onclick="handleVote(\''+c.id+'\')" aria-label="Vote for '+c.name+'">'+btnText+'</button></td>'+
+          '<td class="col-info"><a class="info-link" href="https://www.coingecko.com/en/coins/'+c.id+'" target="_blank" rel="noopener">Details ↗</a></td>'+
         '</tr>';
       }).join('');
     }
 
-    // ── Vote handler ──────────────────────────────────────────────────────────────
-    function handleVote(coinId) {
-      const success = castVote(coinId);
-      if (!success) return;
-      // Update button
-      const btn = document.getElementById('vb-' + coinId);
-      if (btn) { btn.textContent = '✓ Voted'; btn.classList.add('voted'); btn.disabled = true; }
-      // Update count
-      const vc = document.getElementById('vc-' + coinId);
-      if (vc) { vc.textContent = getVotes(coinId); vc.classList.add('has-votes'); }
-      // Refresh champ box + champ tags
-      updateChampBox();
-      applyFilter(); // re-render to update crown tags
+    // ── Champ box ─────────────────────────────────────────────────────────────────
+    function updateChampBox() {
+      const fv=window.MB.votes, entries=Object.entries(fv);
+      const dateStr=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      document.getElementById('champ-label').textContent='VOTE CHAMP — '+dateStr;
+      const empty=document.getElementById('champ-empty'), detail=document.getElementById('champ-detail');
+      if (!entries.length||!window.MB.coins.length) { empty.style.display=''; detail.style.display='none'; return; }
+      entries.sort((a,b)=>b[1]-a[1]);
+      const [champId,champVotes]=entries[0];
+      const coin=window.MB.coins.find(c=>c.id===champId);
+      if (!coin) return;
+      empty.style.display='none'; detail.style.display='';
+      document.getElementById('champ-img').src=coin.image;
+      document.getElementById('champ-img').alt=coin.name;
+      document.getElementById('champ-name').textContent=coin.name;
+      document.getElementById('champ-price').textContent=fmtPrice(coin.current_price);
+      document.getElementById('champ-votes').textContent='🥊 '+champVotes+' vote'+(champVotes!==1?'s':'');
+      document.getElementById('champ-date-tag').textContent=dateStr;
     }
 
     // ── Stats ─────────────────────────────────────────────────────────────────────
     function updateStats(coins) {
-      const mc  = coins.reduce((s, c) => s + (c.market_cap   || 0), 0);
-      const vol = coins.reduce((s, c) => s + (c.total_volume || 0), 0);
-      const avg = coins.reduce((s, c) => s + (c.price_change_percentage_24h || 0), 0) / coins.length;
-      document.getElementById('stat-mcap').textContent = fmtLarge(mc);
-      document.getElementById('stat-vol').textContent  = fmtLarge(vol);
-      const mcEl = document.getElementById('stat-mcap-delta');
-      const mc2  = fmtChg(avg);
-      mcEl.textContent = mc2.text + ' avg (24h)';
-      mcEl.className   = 'stat-delta ' + mc2.cls;
-      const top = coins[0];
-      if (top) {
-        document.getElementById('stat-top').textContent = top.symbol.toUpperCase();
-        const tc = fmtChg(top.price_change_percentage_24h);
-        const te = document.getElementById('stat-top-chg');
-        te.textContent = tc.text; te.className = 'stat-delta ' + tc.cls;
+      const mc=coins.reduce((s,c)=>s+(c.market_cap||0),0);
+      const vol=coins.reduce((s,c)=>s+(c.total_volume||0),0);
+      const avg=coins.reduce((s,c)=>s+(c.price_change_percentage_24h||0),0)/coins.length;
+      document.getElementById('stat-mcap').textContent=fmtLarge(mc);
+      document.getElementById('stat-vol').textContent=fmtLarge(vol);
+      const mcEl=document.getElementById('stat-mcap-delta'),mc2=fmtChg(avg);
+      mcEl.textContent=mc2.text+' avg (24h)'; mcEl.className='stat-delta '+mc2.cls;
+      const top=coins[0];
+      if(top){
+        document.getElementById('stat-top').textContent=top.symbol.toUpperCase();
+        const tc=fmtChg(top.price_change_percentage_24h);
+        const te=document.getElementById('stat-top-chg');
+        te.textContent=tc.text; te.className='stat-delta '+tc.cls;
       }
     }
 
-    // ── Filter ────────────────────────────────────────────────────────────────────
-    function setFilter(btn, type) {
-      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = type;
-      sortCol = null; clearSortUI();
-      applyFilter();
-    }
+    // ── Filter & Sort ─────────────────────────────────────────────────────────────
     function applyFilter() {
-      let list = [...allCoins];
-      const d = getVoteData();
-      if (currentFilter === 'trending') {
-        list = list.filter(c => Math.abs(c.price_change_percentage_24h || 0) > 5);
-      } else if (currentFilter === 'gainers') {
-        list = [...list].sort((a, b) => (b.price_change_percentage_24h || 0) - (a.price_change_percentage_24h || 0));
-      } else if (currentFilter === 'losers') {
-        list = [...list].sort((a, b) => (a.price_change_percentage_24h || 0) - (b.price_change_percentage_24h || 0));
-      } else if (currentFilter === 'mostvoted') {
-        list = [...list].sort((a, b) => (d.votes[b.id] || 0) - (d.votes[a.id] || 0));
-      }
+      let list=[...window.MB.coins];
+      const fv=window.MB.votes;
+      if (window.MB.filter==='trending')   list=list.filter(c=>Math.abs(c.price_change_percentage_24h||0)>5);
+      else if(window.MB.filter==='gainers')list=[...list].sort((a,b)=>(b.price_change_percentage_24h||0)-(a.price_change_percentage_24h||0));
+      else if(window.MB.filter==='losers') list=[...list].sort((a,b)=>(a.price_change_percentage_24h||0)-(b.price_change_percentage_24h||0));
+      else if(window.MB.filter==='mostvoted')list=[...list].sort((a,b)=>(fv[b.id]||0)-(fv[a.id]||0));
       renderCoins(list);
     }
-
-    // ── Column sort ───────────────────────────────────────────────────────────────
-    const sortKeys = {
-      price: c => c.current_price || 0,
-      chg:   c => c.price_change_percentage_24h || 0,
-      mcap:  c => c.market_cap || 0,
-      vol:   c => c.total_volume || 0,
-      votes: c => getVotes(c.id),
+    window.setFilter=function(btn,type){
+      document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active'); window.MB.filter=type; window.MB.sortCol=null; clearSortUI(); applyFilter();
     };
-    function sortBy(col) {
-      sortDir = sortCol === col ? sortDir * -1 : -1;
-      sortCol = col; clearSortUI();
-      const th = document.getElementById('th-' + col);
-      const sa = document.getElementById('sa-' + col);
-      if (th) th.classList.add('sorted');
-      if (sa) sa.textContent = sortDir === -1 ? '▼' : '▲';
-      const fn = sortKeys[col];
-      renderCoins([...allCoins].sort((a, b) => sortDir * (fn(b) - fn(a))));
-    }
-    function clearSortUI() {
-      ['price','chg','mcap','vol','votes'].forEach(k => {
-        const th = document.getElementById('th-' + k);
-        const sa = document.getElementById('sa-' + k);
-        if (th) th.classList.remove('sorted');
-        if (sa) sa.textContent = '';
+    const sortKeys={
+      price:c=>c.current_price||0, chg:c=>c.price_change_percentage_24h||0,
+      mcap:c=>c.market_cap||0, vol:c=>c.total_volume||0,
+      votes:c=>window.MB.votes[c.id]||0
+    };
+    window.sortBy=function(col){
+      window.MB.sortDir=window.MB.sortCol===col?window.MB.sortDir*-1:-1;
+      window.MB.sortCol=col; clearSortUI();
+      const th=document.getElementById('th-'+col),sa=document.getElementById('sa-'+col);
+      if(th)th.classList.add('sorted');
+      if(sa)sa.textContent=window.MB.sortDir===-1?'▼':'▲';
+      renderCoins([...window.MB.coins].sort((a,b)=>window.MB.sortDir*(sortKeys[col](b)-sortKeys[col](a))));
+    };
+    function clearSortUI(){
+      ['price','chg','mcap','vol','votes'].forEach(k=>{
+        const th=document.getElementById('th-'+k),sa=document.getElementById('sa-'+k);
+        if(th)th.classList.remove('sorted'); if(sa)sa.textContent='';
       });
     }
 
-    // ── Fetch live data (3 pages = 75 coins) ─────────────────────────────────────
-    async function fetchData() {
-      try {
-        const pages = await Promise.all(API_PAGES.map(url => fetch(url).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })));
-        const data = pages.flat();
-        allCoins = data;
-        updateStats(data);
-        applyFilter();
-        updateChampBox();
-        const now = new Date();
-        document.getElementById('last-updated').textContent =
-          'Live — ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      } catch (err) {
-        console.error('CoinGecko fetch error:', err);
-        document.getElementById('last-updated').textContent = 'Sample data (add free API key to get live data)';
+    // ── Vote handler ──────────────────────────────────────────────────────────────
+    window.handleVote=async function(coinId){
+      const btn=document.getElementById('vb-'+coinId);
+      if(!btn||btn.disabled)return;
+      const s=getLocal();
+      if(s.used>=VOTE_LIMIT||s.voted[coinId])return;
+      btn.disabled=true; btn.textContent='...';
+      // Try Firebase vote, fall back to local-only
+      if(window.MB.firebaseCastVote){
+        await window.MB.firebaseCastVote(coinId);
+      } else {
+        // Firebase not loaded yet — update locally and in MB.votes
+        window.MB.votes[coinId]=(window.MB.votes[coinId]||0)+1;
+      }
+      s.used++; s.voted[coinId]=true; saveLocal(s);
+      updateBudgetUI();
+      btn.textContent='✓ Voted'; btn.classList.add('voted');
+      const vc=document.getElementById('vc-'+coinId);
+      if(vc){vc.textContent=window.MB.votes[coinId]||1; vc.classList.add('has-votes');}
+      if(s.used>=VOTE_LIMIT){
+        document.querySelectorAll('.vote-btn:not(.voted)').forEach(b=>{
+          b.classList.add('depleted'); b.disabled=true; b.textContent='No votes left';
+        });
+      }
+      updateChampBox(); applyFilter();
+    };
+
+    // ── CoinGecko fetch ───────────────────────────────────────────────────────────
+    const API_PAGES=[
+      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=25&page=1&sparkline=true&price_change_percentage=24h',
+      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=25&page=2&sparkline=true&price_change_percentage=24h',
+      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=meme-token&order=market_cap_desc&per_page=25&page=3&sparkline=true&price_change_percentage=24h',
+    ];
+    async function fetchData(){
+      try{
+        const pages=await Promise.all(API_PAGES.map(u=>fetch(u).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})));
+        const data=pages.flat();
+        window.MB.coins=data; updateStats(data); applyFilter(); updateChampBox();
+        document.getElementById('last-updated').textContent='Live — '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      }catch(e){
+        console.error('CoinGecko fetch error:',e);
+        document.getElementById('last-updated').textContent='Sample data (add free API key for live data)';
       }
     }
 
-    // ── Boot ──────────────────────────────────────────────────────────────────────
-    // Show fallback instantly
-    allCoins = FALLBACK;
+    // ── Boot: show fallback IMMEDIATELY ──────────────────────────────────────────
+    window.MB.coins=FALLBACK;
     updateStats(FALLBACK);
-    applyFilter();
+    updateBudgetUI();
     updateChampBox();
+    applyFilter();
 
-    // Then fetch live
+    // Then fetch live data
     fetchData();
-    setInterval(fetchData, 60000);
+    setInterval(fetchData,60000);
+  </script>
+
+  <!-- ── FIREBASE MODULE: loads async, wires in live votes once ready ── -->
+  <script type="module">
+    import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getDatabase, ref, runTransaction, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+    const app = initializeApp({
+      apiKey:            "AIzaSyAoZGW6I_7nMB23n7hznpJYzdHKbUTcx_8",
+      authDomain:        "memeboxer-39091.firebaseapp.com",
+      databaseURL:       "https://memeboxer-39091-default-rtdb.firebaseio.com",
+      projectId:         "memeboxer-39091",
+      storageBucket:     "memeboxer-39091.firebasestorage.app",
+      messagingSenderId: "114938930771",
+      appId:             "1:114938930771:web:c4eb1427555cadb75bc8a6",
+      measurementId:     "G-07TF1S5TT6"
+    });
+    const db = getDatabase(app);
+
+    // Wire Firebase cast vote into global MB object
+    window.MB.firebaseCastVote = async function(coinId) {
+      const voteRef = ref(db, 'votes/'+TODAY+'/'+coinId);
+      await runTransaction(voteRef, cur => (cur||0)+1);
+    };
+
+    // Listen to today's votes in real time — updates table live for all visitors
+    onValue(ref(db, 'votes/'+TODAY), snapshot => {
+      window.MB.votes = snapshot.val() || {};
+      // Update vote count spans without full re-render
+      Object.entries(window.MB.votes).forEach(([id,count])=>{
+        const el=document.getElementById('vc-'+id);
+        if(el){el.textContent=count;el.classList.toggle('has-votes',count>0);}
+      });
+      // Update champ box live
+      if(typeof updateChampBox==='function') updateChampBox();
+    });
   </script>
 
 </body>
