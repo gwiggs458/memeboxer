@@ -141,7 +141,7 @@
     <div class="hero">
       <div>
         <div class="wordmark" aria-label="MemeBoxer">MEME<span>BOXER</span></div>
-        <div style="font-size:13px; letter-spacing:0.08em; color:var(--text-2); margin-top:6px; font-weight:500;">The First Live Community-Powered Meme Coin Index</div>
+        <div style="font-size:15px; letter-spacing:0.08em; color:var(--text-2); margin-top:6px; font-weight:500;">The First Live Community-Powered Meme Coin Index</div>
         <div class="hero-sub" style="margin-top:6px;">MEME COINS &middot; LIVE RANKINGS &middot; COMMUNITY VOTES</div>
         <div class="hero-sub" style="margin-top:6px;font-size:12px;letter-spacing:0.10em;color:var(--text-2);">🏆 OFFICIAL INDEX — MBXR <span style="color:var(--red);">75</span> — Tracking the Top 75 Meme Coins</div>
       </div>
@@ -355,11 +355,12 @@
         const chg=fmtChg(c.price_change_percentage_24h);
         const up=(c.price_change_percentage_24h||0)>=0;
         const spark=c.sparkline_in_7d?.price?sparkSvg(c.sparkline_in_7d.price,up):'';
-        const votes=fv[c.id]||0, voted=!!s.voted[c.id];
+        const votes=fv[c.id]||0;
+        const outOfVotes=s.used>=VOTE_LIMIT;
         const isChamp=topEntry&&topEntry[0]===c.id&&votes>0;
-        const btnClass=voted?'voted':outOfVotes?'depleted':'';
-        const btnText=voted?'✓ Voted':outOfVotes?'No votes left':'🥊 Vote Champ';
-        const dis=voted||outOfVotes?'disabled':'';
+        const btnClass=outOfVotes?'depleted':'';
+        const btnText=outOfVotes?'No votes left':'🥊 Vote Champ';
+        const dis=outOfVotes?'disabled':'';
         return '<tr>'+
           '<td class="col-rank">'+(c.market_cap_rank||i+1)+'</td>'+
           '<td><div class="col-coin">'+
@@ -458,22 +459,29 @@
       const btn=document.getElementById('vb-'+coinId);
       if(!btn||btn.disabled)return;
       const s=getLocal();
-      if(s.used>=VOTE_LIMIT||s.voted[coinId])return;
+      if(s.used>=VOTE_LIMIT)return;  // only block when out of votes — stacking allowed
       btn.disabled=true; btn.textContent='...';
       // Try Firebase vote, fall back to local-only
       if(window.MB.firebaseCastVote){
         await window.MB.firebaseCastVote(coinId);
       } else {
-        // Firebase not loaded yet — update locally and in MB.votes
         window.MB.votes[coinId]=(window.MB.votes[coinId]||0)+1;
       }
-      s.used++; s.voted[coinId]=true; saveLocal(s);
+      s.used++; s.coinVotes=s.coinVotes||{}; s.coinVotes[coinId]=(s.coinVotes[coinId]||0)+1;
+      saveLocal(s);
       updateBudgetUI();
-      btn.textContent='✓ Voted'; btn.classList.add('voted');
+      const remaining=VOTE_LIMIT-s.used;
       const vc=document.getElementById('vc-'+coinId);
-      if(vc){vc.textContent=window.MB.votes[coinId]||1; vc.classList.add('has-votes');}
-      if(s.used>=VOTE_LIMIT){
-        document.querySelectorAll('.vote-btn:not(.voted)').forEach(b=>{
+      if(vc){vc.textContent=window.MB.votes[coinId]||(s.coinVotes[coinId]||1); vc.classList.add('has-votes');}
+      if(remaining>0){
+        // Still have votes — re-enable button for stacking
+        btn.textContent='🥊 Vote Champ';
+        btn.classList.remove('voted');
+        btn.disabled=false;
+      } else {
+        // Out of votes — disable all buttons
+        btn.textContent='No votes left'; btn.classList.add('depleted');
+        document.querySelectorAll('.vote-btn:not(.depleted)').forEach(b=>{
           b.classList.add('depleted'); b.disabled=true; b.textContent='No votes left';
         });
       }
