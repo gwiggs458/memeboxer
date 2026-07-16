@@ -25,8 +25,8 @@
     .nav-links { display:flex; gap:2rem; list-style:none; }
     .nav-links a { font-size:13px; color:var(--text-2); text-decoration:none; letter-spacing:0.03em; transition:color 0.15s; }
     .nav-links a:hover { color:var(--text); }
-    .nav-links a#mbxr-link { color:var(--gold); }
-    .nav-links a#mbxr-link:hover { color:#e8c060; }
+    .nav-links a#mbxr-link { color:var(--text-2); }
+    .nav-links a#mbxr-link:hover { color:var(--text); }
     .nav-live { font-size:10px; font-weight:600; letter-spacing:0.12em; padding:4px 11px; border-radius:2px; background:var(--red); color:#fff; }
     .container { max-width:1060px; margin:0 auto; padding:0 1.5rem 4rem; }
     .hero { display:flex; align-items:flex-end; justify-content:space-between; padding:2.25rem 0 1.25rem; border-bottom:1px solid var(--border-2); margin-bottom:1.5rem; gap:1rem; }
@@ -43,7 +43,7 @@
     .vote-pip { width:28px; height:28px; border-radius:50%; background:var(--vote-active); border:2px solid var(--vote-active); display:flex; align-items:center; justify-content:center; font-size:13px; transition:all 0.2s; }
     .vote-pip.used { background:var(--bg-3); border-color:var(--border-2); }
     .vote-budget-reset { font-size:11px; color:var(--text-3); }
-    .champ-box { background:var(--gold-bg); border:1px solid var(--gold-border); border-radius:10px; padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap; }
+    .champ-box { background:var(--gold-bg); border:1px solid rgba(139,92,246,0.20); border-radius:10px; padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap; }
     .champ-crown { font-size:36px; flex-shrink:0; line-height:1; }
     .champ-label { font-size:10px; font-weight:600; letter-spacing:0.14em; color:var(--gold); margin-bottom:4px; }
     .champ-name { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:1px; line-height:1; color:var(--text); }
@@ -54,7 +54,7 @@
     .champ-img { width:52px; height:52px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid var(--gold-border); }
     .champ-empty { color:var(--text-3); font-size:14px; }
     .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:1.75rem; }
-    .stat-card { background:var(--bg-2); border:0.5px solid var(--border); border-radius:8px; padding:1rem 1.1rem; }
+    .stat-card { background:var(--bg-2); border:0.5px solid rgba(139,92,246,0.35); border-radius:8px; padding:1rem 1.1rem; }
     .stat-label { font-size:10px; letter-spacing:0.13em; color:var(--text-3); margin-bottom:6px; }
     .stat-val { font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:1px; line-height:1; }
     .stat-delta { font-size:12px; font-weight:500; margin-top:4px; }
@@ -129,7 +129,7 @@
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="community.html">Community</a></li>
-        <li><a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" id="mbxr-link" target="_blank" rel="noopener">MBXR Token</a></li>
+        <li><a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" id="mbxr-link" target="_blank" rel="noopener"><span style="color:#c0c0c0;">M</span><span style="color:var(--red);">BXR</span> Token</a></li>
         <li><a href="#disclaimer">Disclaimer</a></li>
       </ul>
       <span class="nav-live">🥊 LIVE</span>
@@ -143,7 +143,7 @@
         <div class="wordmark" aria-label="MemeBoxer">MEME<span>BOXER</span></div>
         <div style="font-size:15px; letter-spacing:0.08em; color:var(--text-2); margin-top:6px; font-weight:500;">The First Live Community-Powered Meme Coin Index</div>
         <div class="hero-sub" style="margin-top:6px;">MEME COINS &middot; LIVE RANKINGS &middot; COMMUNITY VOTES</div>
-        <div class="hero-sub" style="margin-top:6px;font-size:12px;letter-spacing:0.10em;color:var(--text-2);">🏆 The MBXR <span style="color:var(--red);">100</span> Index — Tracking the Top 100 Meme Coins</div>
+        <div class="hero-sub" style="margin-top:6px;font-size:12px;letter-spacing:0.10em;color:var(--text-2);">🏆 The <span style="color:#c0c0c0;">M</span><span style="color:var(--red);">BXR</span> <span style="color:var(--red);">100</span> Index — Tracking the Top 100 Meme Coins</div>
       </div>
       <div class="hero-right">
         <div class="live-badge">🥊 LIVE RING</div>
