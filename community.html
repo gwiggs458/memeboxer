@@ -11,23 +11,23 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:           #0a0a0a;
-      --bg-2:         #111111;
-      --bg-3:         #1a1a1a;
-      --bg-4:         #222222;
+      --bg:           #0d0d0f;
+      --bg-2:         #13131a;
+      --bg-3:         #1a1a24;
+      --bg-4:         #22222e;
       --text:         #f0ede6;
-      --text-2:       #a0a09a;
-      --text-3:       #5a5a56;
-      --border:       rgba(255,255,255,0.07);
-      --border-2:     rgba(255,255,255,0.14);
+      --text-2:       #b8b8b2;
+      --text-3:       #787872;
+      --border:       rgba(120,100,255,0.12);
+      --border-2:     rgba(120,100,255,0.28);
       --red:          #E24B4A;
       --green:        #1D9E75;
-      --gold:         #d4a843;
-      --gold-bg:      rgba(212,168,67,0.10);
-      --gold-border:  rgba(212,168,67,0.30);
-      --neon:         #39ff14;
-      --neon-bg:      rgba(57,255,20,0.08);
-      --neon-border:  rgba(57,255,20,0.25);
+      --gold:         #8B5CF6;
+      --gold-bg:      rgba(139,92,246,0.10);
+      --gold-border:  rgba(139,92,246,0.30);
+      --neon:         #8B5CF6;
+      --neon-bg:      rgba(139,92,246,0.08);
+      --neon-border:  rgba(139,92,246,0.25);
     }
 
     body {
@@ -57,8 +57,8 @@
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { font-size: 13px; color: var(--text-2); text-decoration: none; letter-spacing: 0.03em; transition: color 0.15s; }
     .nav-links a:hover, .nav-links a.active { color: var(--text); }
-    .nav-links a#mbxr-link { color: var(--gold); }
-    .nav-links a#mbxr-link:hover { color: #e8c060; }
+    .nav-links a#mbxr-link { color: var(--text-2); }
+    .nav-links a#mbxr-link:hover { color: var(--text); }
     .nav-live { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; padding: 4px 11px; border-radius: 2px; background: var(--red); color: #fff; }
 
     /* ── CONTAINER ─────────────────────────────────────── */
@@ -83,8 +83,8 @@
     .page-hero-badge {
       display: inline-block; margin-top: 12px;
       font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-      color: var(--neon); background: var(--neon-bg);
-      border: 0.5px solid var(--neon-border);
+      color: var(--red); background: rgba(226,75,74,0.08);
+      border: 0.5px solid rgba(226,75,74,0.25);
       padding: 4px 12px; border-radius: 2px;
     }
 
@@ -146,7 +146,7 @@
       background: var(--neon-bg); color: var(--neon);
       cursor: pointer; transition: all 0.15s; margin-left: auto;
     }
-    .refresh-btn:hover { background: rgba(57,255,20,0.15); }
+    .refresh-btn:hover { background: rgba(139,92,246,0.15); }
     .refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .loading-indicator {
@@ -160,8 +160,8 @@
     .community-panel { display: flex; flex-direction: column; gap: 1.25rem; }
 
     .token-card {
-      background: linear-gradient(135deg, rgba(226,75,74,0.10), rgba(10,10,10,0.9));
-      border: 0.5px solid rgba(226,75,74,0.30);
+      background: var(--bg-2);
+      border: 0.5px solid var(--border-2);
       border-radius: 10px; padding: 1.5rem; text-align: center;
     }
     .token-icon {
@@ -191,11 +191,16 @@
       box-shadow: 0 4px 16px rgba(226,75,74,0.35);
     }
     .btn-primary:hover { background: #c93a39; box-shadow: 0 6px 24px rgba(226,75,74,0.5); }
-    .btn-green {
-      background: rgba(57,255,20,0.85); color: #000;
-      box-shadow: 0 4px 16px rgba(57,255,20,0.25);
+    .btn-purple {
+      background: var(--bg); color: #fff;
+      border: 1px solid rgba(139,92,246,0.35);
+      box-shadow: none;
     }
-    .btn-green:hover { background: rgba(57,255,20,1); }
+    .btn-purple:hover {
+      background: rgba(139,92,246,0.12);
+      border-color: rgba(139,92,246,0.7);
+      box-shadow: 0 0 16px rgba(139,92,246,0.25);
+    }
 
     /* ── COMMUNITY GOALS ───────────────────────────────── */
     .goals-grid {
@@ -256,7 +261,7 @@
       transition: all 0.25s ease;
     }
     .message-popup.success { background: var(--green); color: #fff; }
-    .message-popup.info { background: var(--gold); color: #000; }
+    .message-popup.info { background: var(--gold); color: #fff; }
     .message-popup.show { opacity: 1; transform: translateX(0); }
 
     /* ── FOOTER ────────────────────────────────────────── */
@@ -308,14 +313,13 @@
 </head>
 <body>
 
-  <!-- Nav — matches home page exactly -->
   <nav aria-label="Site navigation">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">MEME<span>BOXER</span></a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="community.html" class="active">Community</a></li>
-        <li><a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" id="mbxr-link" target="_blank" rel="noopener">MBXR Token</a></li>
+        <li><a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" id="mbxr-link" target="_blank" rel="noopener"><span style="color:#c0c0c0;">M</span><span style="color:var(--red);">BXR</span> Token</a></li>
         <li><a href="#footer-disclaimer">Disclaimer</a></li>
       </ul>
       <span class="nav-live">🥊 LIVE</span>
@@ -324,17 +328,14 @@
 
   <main class="container">
 
-    <!-- Page Hero -->
     <div class="page-hero">
       <div class="page-hero-title">COMMUNITY <span>HUB</span></div>
       <div class="page-hero-sub">Live Crypto News &middot; Community Goals &middot; MemeBoxer Updates</div>
       <div class="page-hero-badge">⚡ Polygon-powered community platform</div>
     </div>
 
-    <!-- Main Grid -->
     <div class="hub-grid">
 
-      <!-- News Feed -->
       <section class="card">
         <div class="card-title">
           <span class="dot"></span>
@@ -346,21 +347,18 @@
         </div>
       </section>
 
-      <!-- Community Panel -->
       <aside class="community-panel">
 
-        <!-- Token Card -->
         <div class="token-card">
           <div class="token-icon">🥊</div>
-          <div class="token-name">MEMEBOXER</div>
+          <div class="token-name"><span style="color:#c0c0c0;">MEME</span><span style="color:var(--red);">BOXER</span></div>
           <div class="token-sub">The ultimate meme boxing champion!</div>
           <div class="token-chain">⚡ Native Polygon blockchain token</div>
-          <a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" class="btn-primary" target="_blank" rel="noopener">🚀 MBXR TOKEN</a>
+          <a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" class="btn-primary btn-purple" target="_blank" rel="noopener">🚀 <span style="color:#c0c0c0;">M</span><span style="color:#E24B4A;">BXR</span> <span style="color:#c0c0c0;">TOKEN</span></a>
         </div>
 
-        <!-- Community Goals -->
         <div class="card">
-          <div class="card-title">🎯 MBXR Community Goals</div>
+          <div class="card-title">🎯 <span style="display:inline;letter-spacing:0;"><span style="color:#c0c0c0;">M</span><span style="color:var(--red);">BXR</span></span>&nbsp;Community Goals</div>
           <div class="goals-grid">
             <div class="goal-item">
               <div class="goal-number">25K</div>
@@ -376,7 +374,6 @@
       </aside>
     </div>
 
-    <!-- Fun Zone -->
     <div class="fun-zone">
       <div class="fun-zone-icon">🥊</div>
       <div class="fun-zone-headline">"Step into the ring. Vote for your champion. Rise to the top!"</div>
@@ -384,16 +381,14 @@
       <div class="fun-zone-copy">Pure Entertainment in the MemeBoxer Arena</div>
       <div class="btn-row">
         <a href="index.html" class="btn-primary">🗳️ Start Voting</a>
-        <a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" class="btn-primary btn-green" target="_blank" rel="noopener">🚀 MBXR TOKEN</a>
+        <a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" class="btn-primary btn-purple" target="_blank" rel="noopener">🚀 <span style="color:#c0c0c0;">M</span><span style="color:#E24B4A;">BXR</span> <span style="color:#c0c0c0;">TOKEN</span></a>
       </div>
     </div>
 
-    <!-- Social Links -->
     <div class="social-row">
       <a href="https://x.com/Memeboxers" target="_blank" rel="noopener" class="social-link"><span>🐦</span><span>Follow on X</span></a>
     </div>
 
-    <!-- Footer -->
     <footer id="footer-disclaimer">
       <div class="footer-summary">
         <strong>Entertainment only.</strong> MemeBoxer is a meme coin data tracker for fun. Votes are a popularity contest — not financial signals. Nothing on this site constitutes financial, legal, or investment advice. Crypto is highly volatile. Always do your own research.
@@ -421,7 +416,6 @@
   </main>
 
   <script>
-    // ── Live News Config ──────────────────────────────────────────────────────────
     const LIVE_NEWS_CONFIG = {
       rssFeeds: [
         'https://cointelegraph.com/rss',
