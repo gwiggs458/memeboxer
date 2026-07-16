@@ -60,6 +60,27 @@
     .stat-delta { font-size:12px; font-weight:500; margin-top:4px; }
     .up{color:var(--green);} .dn{color:var(--red);} .mute{color:var(--text-3);}
     .filter-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:1.25rem; }
+    .filter-top { display:flex; align-items:center; gap:10px; width:100%; margin-bottom:6px; flex-wrap:wrap; }
+    .search-box {
+      flex:1; min-width:180px;
+      font-family:'Inter',sans-serif; font-size:13px;
+      padding:7px 14px; border-radius:4px;
+      border:0.5px solid var(--border-2);
+      background:var(--bg-2); color:var(--text);
+      outline:none; transition:border-color 0.15s;
+    }
+    .search-box::placeholder { color:var(--text-3); }
+    .search-box:focus { border-color:var(--vote-active); }
+    .search-clear {
+      font-size:12px; font-family:'Inter',sans-serif;
+      padding:6px 12px; border-radius:4px;
+      border:0.5px solid var(--border-2);
+      background:transparent; color:var(--text-3);
+      cursor:pointer; transition:all 0.14s; white-space:nowrap;
+      display:none;
+    }
+    .search-clear.visible { display:block; }
+    .search-clear:hover { color:var(--text); border-color:var(--border-2); }
     .filters { display:flex; gap:6px; flex-wrap:wrap; }
     .pill { font-size:12px; font-family:'Inter',sans-serif; padding:6px 16px; border-radius:2px; border:0.5px solid var(--border-2); cursor:pointer; background:transparent; color:var(--text-2); transition:all 0.14s; }
     .pill.active { background:var(--text); color:var(--bg); border-color:var(--text); }
@@ -291,6 +312,10 @@
     </div>
 
     <div class="filter-row">
+      <div class="filter-top">
+        <input class="search-box" id="coin-search" type="text" placeholder="🔍 Search by name or ticker..." oninput="handleSearch(this.value)" aria-label="Search coins" />
+        <button class="search-clear" id="search-clear" onclick="clearSearch()">✕ Clear</button>
+      </div>
       <div class="filters" role="group" aria-label="Filter coins">
         <button class="pill active" onclick="setFilter(this,'all')">All fighters</button>
         <button class="pill" onclick="setFilter(this,'trending')">🔥 Trending</button>
@@ -523,6 +548,13 @@
       else if(window.MB.filter==='gainers')list=[...list].sort((a,b)=>(b.price_change_percentage_24h||0)-(a.price_change_percentage_24h||0));
       else if(window.MB.filter==='losers') list=[...list].sort((a,b)=>(a.price_change_percentage_24h||0)-(b.price_change_percentage_24h||0));
       else if(window.MB.filter==='mostvoted')list=[...list].sort((a,b)=>(fv[b.id]||0)-(fv[a.id]||0));
+      // Apply search on top of filter
+      if (searchQuery) {
+        list = list.filter(c =>
+          c.name.toLowerCase().includes(searchQuery) ||
+          c.symbol.toLowerCase().includes(searchQuery)
+        );
+      }
       renderCoins(list);
     }
     window.setFilter=function(btn,type){
@@ -549,7 +581,24 @@
       });
     }
 
-    // ── Vote handler ──────────────────────────────────────────────────────────────
+    // ── Search ────────────────────────────────────────────────────────────────────
+    let searchQuery = '';
+
+    window.handleSearch = function(val) {
+      searchQuery = val.trim().toLowerCase();
+      const clearBtn = document.getElementById('search-clear');
+      if (clearBtn) clearBtn.classList.toggle('visible', searchQuery.length > 0);
+      applyFilter();
+    };
+
+    window.clearSearch = function() {
+      searchQuery = '';
+      const input = document.getElementById('coin-search');
+      if (input) input.value = '';
+      const clearBtn = document.getElementById('search-clear');
+      if (clearBtn) clearBtn.classList.remove('visible');
+      applyFilter();
+    };
     window.handleVote=async function(coinId){
       const btn=document.getElementById('vb-'+coinId);
       if(!btn||btn.disabled)return;
