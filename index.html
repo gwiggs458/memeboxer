@@ -112,18 +112,100 @@
     .footer-links { display:flex; gap:1.25rem; }
     .footer-links a { font-size:11px; color:var(--text-3); text-decoration:none; transition:color 0.14s; }
     .footer-links a:hover { color:var(--text-2); }
+    /* ── HAMBURGER MENU ────────────────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: transparent;
+      border: none;
+      z-index: 200;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #c0c0c0;
+      border-radius: 2px;
+      transition: all 0.25s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--red); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--red); }
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      background: var(--bg-2);
+      border-bottom: 0.5px solid var(--border-2);
+      padding: 1rem 1.5rem;
+      flex-direction: column;
+      gap: 0;
+      z-index: 99;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 15px;
+      color: var(--text-2);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      padding: 0.85rem 0;
+      border-bottom: 0.5px solid var(--border);
+      transition: color 0.15s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--text); }
+    .mobile-menu a#mobile-mbxr { color: var(--text-2); }
+
+    /* ── MOBILE FULL CHART BAR ─────────────────────────── */
+    .mobile-full-chart {
+      display: none;
+      text-align: center;
+      padding: 10px 14px;
+      margin-top: 10px;
+      border-radius: 6px;
+      background: var(--bg-2);
+      border: 0.5px solid var(--border-2);
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.6;
+    }
+    .mobile-full-chart a {
+      color: #c0c0c0;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .mobile-full-chart a span { color: var(--red); }
+
     @media(max-width:640px){
       .wordmark{font-size:48px;}
       .stats{grid-template-columns:1fr 1fr;}
       .stats .stat-card:last-child{grid-column:span 2;}
       .nav-links{display:none;}
+      .hamburger{display:flex;}
       .champ-box{flex-direction:column;align-items:flex-start;}
+      nav { position: sticky; }
+
+      /* Vote budget bar — stack vertically */
+      .vote-budget-bar { flex-direction:column; align-items:center; text-align:center; }
+      .vote-budget-label { text-align:center; }
+
+      /* Hide non-essential table columns on mobile */
+      .col-mcap, thead th:nth-child(5),
+      .col-vol,  thead th:nth-child(6),
+      .col-spark,thead th:nth-child(7) { display:none; }
+
+      /* Show the full chart message bar */
+      .mobile-full-chart { display:block; }
     }
   </style>
 </head>
 <body>
 
-  <nav aria-label="Site navigation">
+  <nav aria-label="Site navigation" style="position:relative;">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">MEME<span>BOXER</span></a>
       <ul class="nav-links">
@@ -133,6 +215,15 @@
         <li><a href="#disclaimer">Disclaimer</a></li>
       </ul>
       <span class="nav-live">🥊 LIVE</span>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html">Home</a>
+      <a href="community.html">Community</a>
+      <a href="https://www.dextools.io/app/polygon/pair-explorer/0x21b01f243723ebec96f7532ce590d453549d5c9e" id="mobile-mbxr" target="_blank" rel="noopener"><span style="color:#c0c0c0;">M</span><span style="color:var(--red);">BXR</span> Token</a>
+      <a href="#disclaimer" onclick="closeMenu()">Disclaimer</a>
     </div>
   </nav>
 
@@ -230,6 +321,10 @@
           <tr><td colspan="10"><div class="state-msg"><span class="spinner"></span>Loading live data...</div></td></tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="mobile-full-chart">
+      📊 Showing simplified view &middot; Visit <a href="https://memeboxer.com">meme<span>boxer</span>.com</a> for the full <span style="color:#c0c0c0;">M</span><span style="color:var(--red);">BXR</span> <span style="color:var(--red);">100</span> Index
     </div>
 
     <footer id="disclaimer">
@@ -513,6 +608,25 @@
     updateBudgetUI();
     updateChampBox();
     applyFilter();
+
+    // ── Hamburger menu ────────────────────────────────────────────────────────────
+    function toggleMenu() {
+      const btn  = document.getElementById('hamburger');
+      const menu = document.getElementById('mobile-menu');
+      btn.classList.toggle('open');
+      menu.classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobile-menu').classList.remove('open');
+    }
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+      const nav = document.querySelector('nav');
+      if (!nav.contains(e.target)) closeMenu();
+    });
+    window.toggleMenu = toggleMenu;
+    window.closeMenu  = closeMenu;
 
     // Then fetch live data
     fetchData();
